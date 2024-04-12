@@ -5,6 +5,10 @@
 <title>PDF Field Extractor</title>
 </head>
 <body>
+    <div id="questions">
+        <p><strong>Welcome, what's your full name?</strong></p>
+        <input type="text" id="PetitionerName1[0]" placeholder="Enter your full name here">
+    </div>
     <h1>Upload a PDF to extract editable fields</h1>
     <input type="file" id="pdfFile" accept="application/pdf">
     <button onclick="uploadPDF()">Upload PDF</button>
@@ -32,14 +36,16 @@
                 fieldList.innerHTML = ''; // Clear previous entries
                 document.getElementById('editPDF').style.display = 'block'; // Show the edit button
                 data.fields.forEach(field => {
-                    const li = document.createElement('li');
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.id = field;  // Use the field name as the input's ID
-                    input.placeholder = 'Enter value for ' + field;
-                    li.textContent = field + ': ';
-                    li.appendChild(input);
-                    fieldList.appendChild(li);
+                    if (field !== "PetitionerName1[0]") { // Avoid creating an input for the already handled field
+                        const li = document.createElement('li');
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.id = field;  // Use the field name as the input's ID
+                        input.placeholder = 'Enter value for ' + field;
+                        li.textContent = field + ': ';
+                        li.appendChild(input);
+                        fieldList.appendChild(li);
+                    }
                 });
             })
             .catch(error => {
@@ -60,7 +66,7 @@
         const formData = new FormData();
         formData.append('pdf', uploadedPdfFile);
 
-        const inputs = document.querySelectorAll('#fieldList input');
+        const inputs = document.querySelectorAll('#questions input, #fieldList input');
         inputs.forEach(input => {
             if (input.value) {  // Only add field if it has a value
                 formData.append(input.id, input.value);

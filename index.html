@@ -8,6 +8,8 @@
     <div id="questions">
         <p><strong>Welcome, what's your full name?</strong></p>
         <input type="text" id="PetitionerName1[0]" placeholder="Enter your full name here">
+        <p><strong>What's your case number?</strong></p>
+        <input type="text" id="CaseNumber[0]" placeholder="Enter your case number here">
     </div>
     <h1>Upload a PDF to extract editable fields</h1>
     <input type="file" id="pdfFile" accept="application/pdf">
@@ -36,7 +38,7 @@
                 fieldList.innerHTML = ''; // Clear previous entries
                 document.getElementById('editPDF').style.display = 'block'; // Show the edit button
                 data.fields.forEach(field => {
-                    if (field !== "PetitionerName1[0]") { // Avoid creating an input for the already handled field
+                    if (field !== "PetitionerName1[0]" && field !== "CaseNumber[0]") { // Avoid creating input for already handled fields
                         const li = document.createElement('li');
                         const input = document.createElement('input');
                         input.type = 'text';

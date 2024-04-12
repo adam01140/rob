@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PDF Field Extractor</title>
+</head>
+<body>
+    <h1>Upload a PDF to extract editable fields</h1>
+    <input type="file" id="pdfFile" accept="application/pdf">
+    <button onclick="uploadPDF()">Upload PDF</button>
+    <ul id="fieldList"></ul>
+
+    <script>
+        function uploadPDF() {
+    const fileInput = document.getElementById('pdfFile');
+    const file = fileInput.files[0];
+    if (file) {
+        const formData = new FormData();
+        formData.append('pdf', file);
+
+        fetch('/upload', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server responded with a non-OK status');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            const fieldList = document.getElementById('fieldList');
+            fieldList.innerHTML = ''; // Clear previous entries
+            data.fields.forEach(field => {
+                const li = document.createElement('li');
+                li.textContent = field;
+                fieldList.appendChild(li);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error: ' + error.message);
+        });
+    } else {
+        alert('Please select a PDF file to upload.');
+    }
+}
+
+    </script>
+</body>
+</html>

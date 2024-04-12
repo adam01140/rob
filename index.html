@@ -8,6 +8,7 @@
     <h1>Upload a PDF to extract editable fields</h1>
     <input type="file" id="pdfFile" accept="application/pdf">
     <button onclick="uploadPDF()">Upload PDF</button>
+    <button id="editPDF" style="display:none;" onclick="editPDF()">Edit PDF</button>
     <ul id="fieldList"></ul>
 
     <script>
@@ -29,17 +30,15 @@
             .then(data => {
                 const fieldList = document.getElementById('fieldList');
                 fieldList.innerHTML = ''; // Clear previous entries
+                document.getElementById('editPDF').style.display = 'block'; // Show the edit button
                 data.fields.forEach(field => {
                     const li = document.createElement('li');
                     const input = document.createElement('input');
                     input.type = 'text';
-                    input.placeholder = 'Enter value';
-                    const button = document.createElement('button');
-                    button.textContent = 'Edit';
-                    button.onclick = () => editField(field, input.value);
+                    input.id = field;  // Use the field name as the input's ID
+                    input.placeholder = 'Enter value for ' + field;
                     li.textContent = field + ': ';
                     li.appendChild(input);
-                    li.appendChild(button);
                     fieldList.appendChild(li);
                 });
             })
@@ -52,47 +51,46 @@
         }
     }
 
-    function editField(fieldName, fieldValue) {
-    if (!uploadedPdfFile) {
-        alert('No PDF file is loaded for editing.');
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('fieldName', fieldName);
-    formData.append('fieldValue', fieldValue);
-    formData.append('pdf', uploadedPdfFile);
-
-    // Log formData contents for debugging
-    for (var pair of formData.entries()) {
-        console.log(pair[0]+ ', ' + pair[1]);
-    }
-
-    fetch('/edit_field', {
-        method: 'POST',
-        body: formData,
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
+    function editPDF() {
+        if (!uploadedPdfFile) {
+            alert('No PDF file is loaded for editing.');
+            return;
         }
-        return response.blob();
-    })
-    .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'modified_pdf.pdf';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error updating field: ' + error.message);
-    });
-}
 
+        const formData = new FormData();
+        formData.append('pdf', uploadedPdfFile);
+
+        const inputs = document.querySelectorAll('#fieldList input');
+        inputs.forEach(input => {
+            if (input.value) {  // Only add field if it has a value
+                formData.append(input.id, input.value);
+            }
+        });
+
+        fetch('/edit_pdf', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'modified_pdf.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating PDF: ' + error.message);
+        });
+    }
     </script>
 </body>
 </html>

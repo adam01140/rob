@@ -11,9 +11,12 @@
     <ul id="fieldList"></ul>
 
     <script>
+    var uploadedPdfFile = null;  // This will store the PDF file globally
+
     function uploadPDF() {
         const fileInput = document.getElementById('pdfFile');
         const file = fileInput.files[0];
+        uploadedPdfFile = file;  // Save the uploaded file globally
         if (file) {
             const formData = new FormData();
             formData.append('pdf', file);
@@ -50,29 +53,46 @@
     }
 
     function editField(fieldName, fieldValue) {
-        const formData = new FormData();
-        formData.append('fieldName', fieldName);
-        formData.append('fieldValue', fieldValue);
-        fetch('/edit_field', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'modified_pdf.pdf';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error updating field');
-        });
+    if (!uploadedPdfFile) {
+        alert('No PDF file is loaded for editing.');
+        return;
     }
-</script>
 
+    const formData = new FormData();
+    formData.append('fieldName', fieldName);
+    formData.append('fieldValue', fieldValue);
+    formData.append('pdf', uploadedPdfFile);
+
+    // Log formData contents for debugging
+    for (var pair of formData.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]);
+    }
+
+    fetch('/edit_field', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.blob();
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'modified_pdf.pdf';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error updating field: ' + error.message);
+    });
+}
+
+    </script>
 </body>
 </html>

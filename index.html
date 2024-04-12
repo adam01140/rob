@@ -11,44 +11,68 @@
     <ul id="fieldList"></ul>
 
     <script>
-        function uploadPDF() {
-    const fileInput = document.getElementById('pdfFile');
-    const file = fileInput.files[0];
-    if (file) {
-        const formData = new FormData();
-        formData.append('pdf', file);
+    function uploadPDF() {
+        const fileInput = document.getElementById('pdfFile');
+        const file = fileInput.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('pdf', file);
 
-        fetch('/upload', {
+            fetch('/upload', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                const fieldList = document.getElementById('fieldList');
+                fieldList.innerHTML = ''; // Clear previous entries
+                data.fields.forEach(field => {
+                    const li = document.createElement('li');
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.placeholder = 'Enter value';
+                    const button = document.createElement('button');
+                    button.textContent = 'Edit';
+                    button.onclick = () => editField(field, input.value);
+                    li.textContent = field + ': ';
+                    li.appendChild(input);
+                    li.appendChild(button);
+                    fieldList.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            });
+        } else {
+            alert('Please select a PDF file to upload.');
+        }
+    }
+
+    function editField(fieldName, fieldValue) {
+        const formData = new FormData();
+        formData.append('fieldName', fieldName);
+        formData.append('fieldValue', fieldValue);
+        fetch('/edit_field', {
             method: 'POST',
             body: formData,
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Server responded with a non-OK status');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            const fieldList = document.getElementById('fieldList');
-            fieldList.innerHTML = ''; // Clear previous entries
-            data.fields.forEach(field => {
-                const li = document.createElement('li');
-                li.textContent = field;
-                fieldList.appendChild(li);
-            });
+        .then(response => response.blob())
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'modified_pdf.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error: ' + error.message);
+            alert('Error updating field');
         });
-    } else {
-        alert('Please select a PDF file to upload.');
     }
-}
+</script>
 
-    </script>
 </body>
 </html>

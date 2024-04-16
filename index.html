@@ -4,45 +4,176 @@
 <meta charset="UTF-8">
 <title>PDF Field Extractor</title>
 </head>
+
+<style>
+    #questions {
+        border: 2px solid lightblue; /* Set the border color */
+        border-radius: 10px;        /* Rounded corners */
+        padding: 20px;              /* Some padding inside the border */
+        margin: 20px;               /* Margin outside the border */
+        background-color: #e0f7fa;  /* Light blue background */
+        width: 50%;                 /* Control width */
+    }
+	
+    .next-button {
+        background-color: #64adc4;  /* Match theme color */
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+</style>
+
+
 <body>
-    <div id="questions">
-        <p><strong>Welcome, what's your full name?</strong></p>
-        <input type="text" id="PetitionerName1[0]" placeholder="Enter your full name here">
-        <p><strong>What's your case number?</strong></p>
-        <input type="text" id="CaseNumber[0]" placeholder="Enter your case number here">
-    </div>
+<center>
     <h1>Upload a PDF to extract editable fields</h1>
     <input type="file" id="pdfFile" accept="application/pdf">
     <button onclick="uploadPDF()">Upload PDF</button>
     <button id="editPDF" style="display:none;" onclick="editPDF()">Edit PDF</button>
-    <ul id="fieldList"></ul>
+    <ul id="fieldList" style="display:none"></ul>
+
+    <div id="questions">
+        <div id="questions1">
+            <h1>Waive Court Fees Form</h1>
+            <p><strong>What's your full name?</strong></p>
+            <input type="text" id="PetitionerName1[0]" placeholder="Full Name"><br>
+            <p><strong>What's your case number?</strong></p>
+            <input type="text" id="CaseNumber[0]" placeholder="Case Number"><br>
+            <p><strong>What's your street address?</strong></p>
+            <input type="text" id="PetitionerStrAddress[0]" placeholder="Street"><br>
+            <input type="text" id="PetitionerCity[0]" placeholder="City"><br>
+            <input type="text" id="PetitionerState[0]" placeholder="State"><br>
+            <input type="text" id="PetitionerZip[0]" placeholder="Zip"><br>
+            <p><strong>What's your phone number?</strong></p>
+            <input type="text" id="PetitionerTel[0]" placeholder="Phone Number"><br>
+            <br><br>
+            <button class="next-button" onclick="goToNext('questions1', 'questions2')">Next</button>
+        </div>
+
+        <div id="questions2" style="display:none">
+            <h1>Employment Information</h1>
+            <p><strong>Are you currently employed?</strong></p>
+            <select id="employmentStatus" onchange="toggleEmploymentFields()">
+                <option value="">Select an option</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <div id="employmentQuestions" style="display:none">
+                <p><strong>What's your job title?</strong></p>
+                <input type="text" id="PetitionerJobTitle[0]" placeholder="Job Title">
+                <p><strong>Name of your employer?</strong></p>
+                <input type="text" id="PetitionerEmployerName[0]" placeholder="Employer Name">
+                <p><strong>What's your job address?</strong></p>
+                <input type="text" id="PetitionerEmployerAdd[0]" placeholder="Job Address">
+            </div>
+            <br>
+            <button class="next-button" onclick="goToNext('questions2', 'questions3')">Next</button>
+        </div>
+
+        <div id="questions3" style="display:none">
+            <h1>Lawyer Information</h1>
+            <p><strong>Do you have a lawyer?</strong></p>
+            <select id="LawyerStatus" onchange="toggleLawyerFields()">
+                <option value="">Select an option</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <div id="LawyerQuestions" style="display:none">
+                <p><strong>What's your lawyer's full name?</strong></p>
+                <input type="text" id="LawyerName" placeholder="Lawyer's Full Name">
+                <p><strong>What law firm does your lawyer work for?</strong></p>
+                <input type="text" id="FirmName" placeholder="Law Firm">
+                <p><strong>What's your lawyer's state bar number?</strong></p>
+                <input type="text" id="StateBarNumber" placeholder="State Bar Number">
+            </div>
+            <br>
+            <button class="next-button" onclick="handleLawyerNext()">Next</button>
+        </div>
+
+        <div id="questions4" style="display:none">
+            <h1>The end for now</h1>
+        </div>
+    </div>
 
     <script>
-    var uploadedPdfFile = null;  // This will store the PDF file globally
+    function toggleLawyerFields() {
+        var lawyerStatus = document.getElementById('LawyerStatus').value;
+        var lawyerQuestions = document.getElementById('LawyerQuestions');
+        lawyerQuestions.style.display = (lawyerStatus === 'yes') ? 'block' : 'none';
+    }
 
+    function handleLawyerNext() {
+        var lawyerStatus = document.getElementById('LawyerStatus').value;
+        var lawyerInfo = '';
+        if (lawyerStatus === 'yes') {
+            var lawyerName = document.getElementById('LawyerName').value;
+            var firmName = document.getElementById('FirmName').value;
+            var stateBarNumber = document.getElementById('StateBarNumber').value;
+            if (!lawyerName || !firmName || !stateBarNumber) {
+                alert('Please fill all lawyer information fields.');
+                return;
+            }
+            lawyerInfo = `My lawyer's name is ${lawyerName}, their law firm is ${firmName}, and their state bar number is ${stateBarNumber}.`;
+        }
+        // Set the compiled lawyer info into a hidden field or directly manipulate the PDF here if possible
+        var lawyerInfoField = document.getElementById('PetitionerLawyerInfo[0]');
+        if (lawyerInfoField) {
+            lawyerInfoField.value = lawyerInfo;
+        }
+		
+		alert("hello")
+        goToNext('questions3', 'questions4');
+    }
+
+    function toggleEmploymentFields() {
+        var employmentStatus = document.getElementById('employmentStatus').value;
+        var employmentQuestions = document.getElementById('employmentQuestions');
+        employmentQuestions.style.display = (employmentStatus === 'yes') ? 'block' : 'none';
+    }
+
+    function handleEmploymentNext() {
+        var employmentStatus = document.getElementById('employmentStatus').value;
+        var nextDivId = (employmentStatus === 'no') ? 'questions3' : 'questions2';
+        goToNext('questions2', nextDivId);
+    }
+
+    function goToNext(currentDivId, nextDivId) {
+        var currentDiv = document.getElementById(currentDivId);
+        var nextDiv = document.getElementById(nextDivId);
+        if (!currentDiv || !nextDiv) {
+            console.error('One of the divs was not found.');
+            return;
+        }
+        currentDiv.style.display = 'none';
+        nextDiv.style.display = 'block';
+    }
+
+    var uploadedPdfFile = null; // This will store the PDF file globally
     function uploadPDF() {
-        const fileInput = document.getElementById('pdfFile');
-        const file = fileInput.files[0];
-        uploadedPdfFile = file;  // Save the uploaded file globally
+        var fileInput = document.getElementById('pdfFile');
+        var file = fileInput.files[0];
+        uploadedPdfFile = file; // Save the uploaded file globally
         if (file) {
-            const formData = new FormData();
+            var formData = new FormData();
             formData.append('pdf', file);
-
             fetch('/upload', {
                 method: 'POST',
                 body: formData,
             })
             .then(response => response.json())
             .then(data => {
-                const fieldList = document.getElementById('fieldList');
+                var fieldList = document.getElementById('fieldList');
                 fieldList.innerHTML = ''; // Clear previous entries
                 document.getElementById('editPDF').style.display = 'block'; // Show the edit button
                 data.fields.forEach(field => {
-                    if (field !== "PetitionerName1[0]" && field !== "CaseNumber[0]") { // Avoid creating input for already handled fields
-                        const li = document.createElement('li');
-                        const input = document.createElement('input');
+                    if (field !== "PetitionerName1[0]" && field !== "CaseNumber[0]" && field !== "PetitionerStrAddress[0]") { // Avoid creating input for already handled fields
+                        var li = document.createElement('li');
+                        var input = document.createElement('input');
                         input.type = 'text';
-                        input.id = field;  // Use the field name as the input's ID
+                        input.id = field; // Use the field name as the input's ID
                         input.placeholder = 'Enter value for ' + field;
                         li.textContent = field + ': ';
                         li.appendChild(input);
@@ -64,17 +195,14 @@
             alert('No PDF file is loaded for editing.');
             return;
         }
-
-        const formData = new FormData();
+        var formData = new FormData();
         formData.append('pdf', uploadedPdfFile);
-
-        const inputs = document.querySelectorAll('#questions input, #fieldList input');
+        var inputs = document.querySelectorAll('#questions input, #fieldList input');
         inputs.forEach(input => {
-            if (input.value) {  // Only add field if it has a value
+            if (input.value) { // Only add field if it has a value
                 formData.append(input.id, input.value);
             }
         });
-
         fetch('/edit_pdf', {
             method: 'POST',
             body: formData,
@@ -86,8 +214,8 @@
             return response.blob();
         })
         .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
             a.href = url;
             a.download = 'modified_pdf.pdf';
             document.body.appendChild(a);

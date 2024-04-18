@@ -20,6 +20,18 @@
         margin: 10px;               /* Margin outside the border */
         background-color: #e0f7fa;  /* Light blue background */
         width: 45%;                 /* Control width */
+        height: 100%;              /* Set a fixed height */
+        overflow-y: auto;           /* Enable vertical scrolling */
+    }
+	
+	
+	#pdfPreview {
+        border: 2px solid lightblue; /* Set the border color */
+        border-radius: 10px;        /* Rounded corners */
+        padding: 20px;              /* Some padding inside the border */
+        margin: 10px;               /* Margin outside the border */
+        background-color: #e0f7fa;  /* Light blue background */
+        width: 45%;                 /* Control width */
         height: 600px;              /* Set a fixed height */
         overflow-y: auto;           /* Enable vertical scrolling */
     }
@@ -68,8 +80,10 @@
             <input type="text" id="PetitionerTel[0]" placeholder="Phone Number"><br>
             <br><br>
             <button class="next-button" onclick="goToNext('questions1', 'questions2')">Next</button>
+			
         </div>
-
+	
+	
         <div id="questions2" style="display:none">
             <h1>Employment Information</h1>
             <p><strong>Are you currently employed?</strong></p>

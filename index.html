@@ -50,10 +50,16 @@
 
 <body>
 <center>
+
+
+
+	<div id="develepor" style="display:none">
+	
+	
     <h1>Upload a PDF to extract editable fields</h1>
     <input type="file" id="pdfFile" accept="application/pdf">
     <button onclick="uploadPDF()">Upload PDF</button>
-	
+	<button onclick="loadDefaultPDF()">Load Default PDF</button>
 	
 	<div id="edit" style="display:none;">
     <button id="editPDF" style="display:none;" onclick="editPDF()">Edit PDF</button>
@@ -63,6 +69,9 @@
     <ul id="fieldList" style="display:none"></ul>
 
 
+	</div>
+	
+	 <ul id="fieldList" style="display:none"></ul>
 	
     <div id="questions">
         <div id="questions1">
@@ -139,6 +148,22 @@
 
 
     <script>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+		
+		
+		
+		
     function toggleLawyerFields() {
         var lawyerStatus = document.getElementById('LawyerStatus').value;
         var lawyerQuestions = document.getElementById('LawyerQuestions');
@@ -193,47 +218,60 @@
         nextDiv.style.display = 'block';
     }
 
-    var uploadedPdfFile = null; // This will store the PDF file globally
     function uploadPDF() {
-	
-	
         var fileInput = document.getElementById('pdfFile');
         var file = fileInput.files[0];
-        uploadedPdfFile = file; // Save the uploaded file globally
         if (file) {
-            var formData = new FormData();
-            formData.append('pdf', file);
-            fetch('/upload', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                var fieldList = document.getElementById('fieldList');
-                fieldList.innerHTML = ''; // Clear previous entries
-                document.getElementById('editPDF').style.display = 'block'; // Show the edit button
-                data.fields.forEach(field => {
-                    if (field !== "PetitionerName1[0]" && field !== "CaseNumber[0]" && field !== "PetitionerStrAddress[0]") { // Avoid creating input for already handled fields
-                        var li = document.createElement('li');
-                        var input = document.createElement('input');
-                        input.type = 'text';
-                        input.id = field; // Use the field name as the input's ID
-                        input.placeholder = 'Enter value for ' + field;
-                        li.textContent = field + ': ';
-                        li.appendChild(input);
-                        fieldList.appendChild(li);
-                    }
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error: ' + error.message);
-            });
+            uploadedPdfFile = file; // Save the uploaded file globally
+            displayPDF(file);
         } else {
             alert('Please select a PDF file to upload.');
         }
-		
-		editPDF();
+    }
+
+    function loadDefaultPDF() {
+        const defaultUrl = 'http://127.0.0.1:5000/form.pdf';
+        fetch(defaultUrl)
+        .then(response => response.blob())
+        .then(blob => {
+            uploadedPdfFile = blob; // Save the default PDF blob globally
+            displayPDF(blob);
+        })
+        .catch(error => {
+            console.error('Error loading default PDF:', error);
+            alert('Error loading default PDF: ' + error.message);
+        });
+    }
+
+    function displayPDF(pdfBlob) {
+        var formData = new FormData();
+        formData.append('pdf', pdfBlob);
+        fetch('/upload', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('editPDF').style.display = 'block'; // Show the edit button
+            var fieldList = document.getElementById('fieldList');
+            fieldList.innerHTML = '';
+            data.fields.forEach(field => {
+                if (field !== "PetitionerName1[0]" && field !== "CaseNumber[0]" && field !== "PetitionerStrAddress[0]") {
+                    var li = document.createElement('li');
+                    var input = document.createElement('input');
+                    input.type = 'text';
+                    input.id = field;
+                    input.placeholder = 'Enter value for ' + field;
+                    li.textContent = field + ': ';
+                    li.appendChild(input);
+                    fieldList.appendChild(li);
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error processing PDF:', error);
+            alert('Error processing PDF: ' + error.message);
+        });
     }
 
     function editPDF() {
@@ -265,10 +303,55 @@
             document.getElementById('pdfPreview').style.display = 'block';
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error updating PDF:', error);
             alert('Error updating PDF: ' + error.message);
         });
     }
+
+    // Automatically load the default PDF when the page loads
+    window.onload = function() {
+        loadDefaultPDF();
+    };
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	var uploadedPdfFile = null; // This will store the PDF file globally
+
+        function loadDefaultPDF2() {
+            const defaultUrl = 'http://127.0.0.1:5000/form.pdf';
+            fetch(defaultUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                uploadedPdfFile = blob; // Save the default PDF blob globally
+				editPDF(blob);
+                //uploadPDF(blob); // Show preview
+				
+            })
+            .catch(error => {
+                console.error('Error loading default PDF:', error);
+                alert('Error loading default PDF: ' + error.message);
+            });
+        }
+
+     
+       
+		
+		
+	loadDefaultPDF2()
+		
     </script>
 </body>
 </html>

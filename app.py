@@ -14,10 +14,11 @@ def upload_pdf():
         pdf_file = request.files['pdf']
         reader = PyPDF2.PdfReader(pdf_file.stream)
         fields = reader.get_fields()
-        field_names = list(fields.keys()) if fields else []
+        field_names = [{'name': name, 'is_checkbox': field.get('/FT') == '/Btn', 'is_text': field.get('/FT') == '/Tx'} for name, field in fields.items()] if fields else []
         return jsonify({'fields': field_names})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 @app.route('/edit_pdf', methods=['POST'])
 def edit_pdf():
@@ -32,10 +33,16 @@ def edit_pdf():
                 for annot in annots:
                     resolved_annot = annot.get_object()
                     field_name = resolved_annot.get('/T')
-                    if field_name in request.form:
-                        resolved_annot.update({
-                            PyPDF2.generic.NameObject('/V'): PyPDF2.generic.TextStringObject(request.form[field_name])
-                        })
+                    if field_name and field_name in request.form:
+                        field_value = request.form[field_name]
+                        if resolved_annot.get('/FT') == '/Btn':  # Checkbox
+                            resolved_annot.update({
+                                PyPDF2.generic.NameObject('/V'): PyPDF2.generic.NameObject('/Yes') if field_value == 'on' else PyPDF2.generic.NameObject('/Off')
+                            })
+                        else:  # Text field
+                            resolved_annot.update({
+                                PyPDF2.generic.NameObject('/V'): PyPDF2.generic.TextStringObject(field_value)
+                            })
             writer.add_page(page)
 
         output_stream = io.BytesIO()

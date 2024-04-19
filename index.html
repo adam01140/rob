@@ -264,18 +264,20 @@
             document.getElementById('editPDF').style.display = 'block'; // Show the edit button
             var fieldList = document.getElementById('fieldList');
             fieldList.innerHTML = '';
-            data.fields.forEach(field => {
-                if (field !== "PetitionerName1[0]" && field !== "CaseNumber[0]" && field !== "PetitionerStrAddress[0]") {
-                    var li = document.createElement('li');
-                    var input = document.createElement('input');
-                    input.type = 'text';
-                    input.id = field;
-                    input.placeholder = 'Enter value for ' + field;
-                    li.textContent = field + ': ';
-                    li.appendChild(input);
-                    fieldList.appendChild(li);
-                }
-            });
+			
+			
+            // Correct this part of the displayPDF function in index.html
+data.fields.forEach(field => {
+    var li = document.createElement('li');
+    var input = document.createElement('input');  // Always an input
+    input.type = field.is_checkbox ? 'checkbox' : 'text';  // Set type based on property
+    input.id = field.name;
+    input.placeholder = 'Enter value for ' + field.name;
+    li.textContent = field.name + ': ';
+    li.appendChild(input);
+    fieldList.appendChild(li);
+});
+
         })
         .catch(error => {
             console.error('Error processing PDF:', error);

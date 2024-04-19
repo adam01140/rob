@@ -52,8 +52,7 @@
 <center>
 
 
-<ul id="fieldList" ></ul>
-	<div id="develepor" style="display:none">
+	<div id="develepor" >
 	
 	
     <h1>Upload a PDF to extract editable fields</h1>
@@ -61,7 +60,7 @@
     <button onclick="uploadPDF()">Upload PDF</button>
 	<button onclick="loadDefaultPDF()">Load Default PDF</button>
 	
-	<div id="edit" style="display:none;">
+	<div id="edit" >
     <button id="editPDF" style="display:none;" onclick="editPDF()">Edit PDF</button>
 	</div>
 	
@@ -71,7 +70,7 @@
 
 	</div>
 	
-	 <ul id="fieldList" style="display:none"></ul>
+	 <ul id="fieldList" ></ul>
 	
     <div id="questions">
         <div id="questions1">
@@ -234,17 +233,23 @@
     }
 
     function loadDefaultPDF() {
-        const defaultUrl = 'http://127.0.0.1:5000/form.pdf';
-        fetch(defaultUrl)
-        .then(response => response.blob())
-        .then(blob => {
-            uploadedPdfFile = blob; // Save the default PDF blob globally
-            displayPDF(blob);
-        })
-        .catch(error => {
-            console.error('Error loading default PDF:', error);
-            alert('Error loading default PDF: ' + error.message);
-        });
+	
+	
+		const defaultUrl = 'http://127.0.0.1:5000/form.pdf';
+            fetch(defaultUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                uploadedPdfFile = blob; // Save the default PDF blob globally
+				editPDF(blob);
+                displayPDF(blob);
+				
+            })
+            .catch(error => {
+                console.error('Error loading default PDF:', error);
+                alert('Error loading default PDF: ' + error.message);
+            });
+			
+		
     }
 
     function displayPDF(pdfBlob) {
@@ -319,42 +324,7 @@
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	var uploadedPdfFile = null; // This will store the PDF file globally
 
-        function loadDefaultPDF2() {
-            const defaultUrl = 'http://127.0.0.1:5000/form.pdf';
-            fetch(defaultUrl)
-            .then(response => response.blob())
-            .then(blob => {
-                uploadedPdfFile = blob; // Save the default PDF blob globally
-				editPDF(blob);
-                //uploadPDF(blob); // Show preview
-				
-            })
-            .catch(error => {
-                console.error('Error loading default PDF:', error);
-                alert('Error loading default PDF: ' + error.message);
-            });
-        }
-
-     
-       
-		
-		
-	loadDefaultPDF2()
 		
     </script>
 </body>

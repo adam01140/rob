@@ -293,11 +293,21 @@ data.fields.forEach(field => {
         var formData = new FormData();
         formData.append('pdf', uploadedPdfFile);
         var inputs = document.querySelectorAll('#questions input, #fieldList input');
-        inputs.forEach(input => {
-            if (input.value) {
-                formData.append(input.id, input.value);
-            }
-        });
+        
+		// Add this in your JavaScript when preparing data to send to the server
+var inputs = document.querySelectorAll('#questions input, #fieldList input');
+inputs.forEach(input => {
+    if (input.type === 'checkbox') {
+        formData.append(input.id, input.checked ? 'Yes' : 'No');
+    } else {
+        formData.append(input.id, input.value);
+    }
+});
+
+
+
+
+		
         fetch('/edit_pdf', {
             method: 'POST',
             body: formData,

@@ -33,25 +33,31 @@ def edit_pdf():
                 for annot in annots:
                     resolved_annot = annot.get_object()
                     field_name = resolved_annot.get('/T')
+                    field_type = resolved_annot.get('/FT')
+
                     if field_name and field_name in request.form:
-                        field_value = request.form[field_name]
-                        if resolved_annot.get('/FT') == '/Btn':  # Checkbox
+                        if field_type == PyPDF2.generic.NameObject('/Btn'):  # Checkbox
+                            value = '/Yes' if request.form[field_name] == 'Yes' else '/Off'
                             resolved_annot.update({
-                                PyPDF2.generic.NameObject('/V'): PyPDF2.generic.NameObject('/Yes') if field_value == 'on' else PyPDF2.generic.NameObject('/Off')
+                                PyPDF2.generic.NameObject('/V'): PyPDF2.generic.NameObject(value),
+                                PyPDF2.generic.NameObject('/AS'): PyPDF2.generic.NameObject(value)
                             })
                         else:  # Text field
                             resolved_annot.update({
-                                PyPDF2.generic.NameObject('/V'): PyPDF2.generic.TextStringObject(field_value)
+                                PyPDF2.generic.NameObject('/V'): PyPDF2.generic.TextStringObject(request.form[field_name])
                             })
+
             writer.add_page(page)
 
         output_stream = io.BytesIO()
         writer.write(output_stream)
         output_stream.seek(0)
-
         return send_file(output_stream, as_attachment=True, download_name='modified_pdf.pdf')
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

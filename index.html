@@ -13,7 +13,7 @@
         margin-top: 20px;
     }
 
-    #questions, #pdfPreview {
+    #questions{
         border: 2px solid lightblue; /* Set the border color */
         border-radius: 10px;        /* Rounded corners */
         padding: 20px;              /* Some padding inside the border */
@@ -25,16 +25,32 @@
     }
 	
 	
-	#pdfPreview {
-        border: 2px solid lightblue; /* Set the border color */
-        border-radius: 10px;        /* Rounded corners */
-        padding: 20px;              /* Some padding inside the border */
-        margin: 10px;               /* Margin outside the border */
-        background-color: #e0f7fa;  /* Light blue background */
-        width: 45%;                 /* Control width */
-        height: 600px;              /* Set a fixed height */
-        overflow-y: auto;           /* Enable vertical scrolling */
-    }
+	.pdf-container {
+    display: flex;
+    justify-content: space-around; /* Distributes space between and around content items */
+    align-items: start; /* Aligns items to be flex-start aligned */
+    margin-top: 20px;
+}
+
+#pdfPreview, #pdfPreview2 {
+    flex: 1;  /* Each takes up equal space */
+    border: 2px solid lightblue;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    background-color: #e0f7fa;
+    width: 45%;  /* Adjust width to make sure they do not squash together */
+    height: 600px;  /* Optional: Adjust height as necessary */
+    overflow-y: auto;
+    box-sizing: border-box; /* Includes padding and borders in the element's total width and height */
+}
+
+#pdfFrame, #pdfFrame2 {
+    width: 100%;  /* Ensure it takes the full width of its parent */
+    height: 100%;  /* Ensure it takes the full height of its parent */
+    border: none;  /* Remove any default border */
+}
+
 	
     .next-button {
         background-color: #64adc4;  /* Match theme color */
@@ -140,11 +156,17 @@
 	
 	
 
-	<div id="pdfPreview" style="display:none">
+	<div class="pdf-container">
+    <div id="pdfPreview" style="display:none">
         <iframe id="pdfFrame" style="width:100%; height:100%;"></iframe>
     </div>
+    
+    <div id="pdfPreview2" style="display:none">
+        <iframe id="pdfFrame2" style="width:100%; height:100%;"></iframe>
+    </div>
+</div>
 
-	
+
 
 	<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
 
@@ -354,6 +376,47 @@ data.fields.forEach(field => {
 	
 	
 	
+	
+	function loadSecondaryPDF() {
+    const secondaryUrl = 'http://127.0.0.1:5000/form2.pdf';
+    fetch(secondaryUrl)
+        .then(response => response.blob())
+        .then(blob => {
+            var url = window.URL.createObjectURL(blob);
+            document.getElementById('pdfFrame2').src = url;
+            document.getElementById('pdfPreview2').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error loading second PDF:', error);
+            alert('Error loading second PDF: ' + error.message);
+        });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+window.onload = function() {
+    loadDefaultPDF();
+    loadSecondaryPDF(); // This will also load the second PDF on page load.
+};
+
 
 		
     </script>

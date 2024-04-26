@@ -206,37 +206,27 @@
 
 
 
-<div id="report" class="container" >
-        <h2>Report a Citation</h2>
-        <label for="citationNumber">Citation Number:</label>
-        <input type="text" id="citationNumber" required>
-        
-        <label for="timeOccurred">Time Occurred:</label>
-        <input type="datetime-local" id="timeOccurred" required>
-        
-        <label for="locationOccurred">Location Occurred:</label>
-        <input type="text" id="locationOccurred" required>
-        
-        <label for="licensePlate">License Plate Number:</label>
-        <input type="text" id="licensePlate" required>
-        
-        <button id="submitCitation">Report a Citation</button>
-        
+
+
+
+
+
+
+
+<div id="userForms">
+    <div>
+        <h2>Sign Up</h2>
+        <input type="text" id="signupUsername" placeholder="Username">
+        <input type="password" id="signupPassword" placeholder="Password">
+        <button onclick="signUp()">Sign Up</button>
     </div>
-    <div id="list" class="container">
-        <h2>Citation List</h2>
-		<button id="fetchCitations">Fetch Citations</button> <!-- Added a button for fetching citations -->
+    <div>
+        <h2>Log In</h2>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="logIn()">Log In</button>
     </div>
-
-
-
-
-
-
-
-
-
-
+</div>
 
 
 
@@ -245,121 +235,57 @@
 <script>
 	
 	
-	
-	
-	
-	
-        document.getElementById("submitCitation").addEventListener("click", function() {
-            const citationNumber = document.getElementById("citationNumber").value;
-            const timeOccurred = document.getElementById("timeOccurred").value;
-            const locationOccurred = document.getElementById("locationOccurred").value;
-            const licensePlate = document.getElementById("licensePlate").value;
-            
-            fetch('https://signin0114-10530df3aff0.herokuapp.com/api/citations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    citationNumber,
-                    timeOccurred,
-                    locationOccurred,
-                    licensePlate,
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        });
+// Hide questions div initially
+document.getElementById('questions').style.display = 'none';
 
-        document.getElementById("fetchCitations").addEventListener("click", function() {
-		
-	
-				//dude lets go
-				
-            //const password = prompt("Please enter the password:");
-            fetch(`https://signin0114-10530df3aff0.herokuapp.com/api/citations?password=${encodeURIComponent(password)}`, {
-                method: 'GET',
-            })
-            .then(response => {
-                if (!response.ok) {
-                    //throw new Error('Unauthorized access or error fetching data.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                const listDiv = document.getElementById("list");
-                listDiv.innerHTML = "<h2>License Plates:</h2>";
-                data.forEach(citation => {
-                    const p = document.createElement("p");
-                    p.textContent = `${citation.licensePlate}`;
-                    listDiv.appendChild(p);
-                });
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Unauthorized access or error fetching data.');
-            });
-        });
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		document.getElementById("fetchCitations").addEventListener("click", function() {
-    const username = prompt("Please enter the username:");
-    const password = prompt("Please enter the password:");
-    if (username === "adam0114") {
-        fetch(`https://signin0114-10530df3aff0.herokuapp.com/api/citations?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
-            method: 'GET',
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Unauthorized access or error fetching data.');
-            }
-            return response.json();
-        })
-        .then(data => {
-            const listDiv = document.getElementById("list");
-            listDiv.innerHTML = "<h2>License Plates:</h2>";
-            data.forEach(citation => {
-                const p = document.createElement("p");
-                p.textContent = `${citation.licensePlate}`;
-                listDiv.appendChild(p);
-            });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Unauthorized access or error fetching data.');
-        });
-    } else {
-        alert('Unauthorized access: Incorrect username');
-    }
-});
+function signUp() {
+    var username = document.getElementById('signupUsername').value;
+    var password = document.getElementById('signupPassword').value;
+    fetch('/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+    }).then(response => {
+        if (response.ok) {
+            alert('Signup successful!');
+            window.location.href = '/'; // Redirect to home page
+        } else {
+            response.text().then(text => alert(text));
+        }
+    });
+}
 
-		
-		
-    </script>
+function logIn() {
+    var username = document.getElementById('loginUsername').value;
+    var password = document.getElementById('loginPassword').value;
+    fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+    }).then(response => {
+        if (response.ok) {
+            document.getElementById('questions').style.display = 'block'; // Show questions div
+            document.getElementById('userForms').style.display = 'none'; // Optionally hide the login form
+        } else {
+            response.text().then(text => alert(text));
+        }
+    });
+}
 
-    <script>
-	
+
+// Check if user is logged in when the page loads
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/check_login').then(response => {
+        if (response.ok) {
+            document.getElementById('questions').style.display = 'block';
+            document.getElementById('userForms').style.display = 'none';
+        }
+    });
+});	
 	
 	
 	
@@ -590,17 +516,6 @@ data.fields.forEach(field => {
             alert('Error loading second PDF: ' + error.message);
         });
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

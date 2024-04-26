@@ -26,7 +26,7 @@
     margin: 10px;               /* Margin outside the border */
     background-color: #e0f7fa;  /* Light blue background */
     width: 600px;               /* Fixed width */
-    height: 650px;              /* Fixed height */
+    height: 100%              /* Fixed height */
     overflow-y: auto;           /* Enable vertical scrolling for overflow */
     overflow-x: hidden;         /* Hide horizontal overflow */
 }
@@ -41,22 +41,32 @@
     background-color: #e0f7fa;  /* Light blue background */
     width: 600px;               /* Fixed width */
     height: 100%              /* Fixed height */
-    overflow-y: auto;           /* Enable vertical scrolling for overflow */
-    overflow-x: hidden;         /* Hide horizontal overflow */
+    
 }
 
 
 #userProfile {
     border: 4px solid lightblue; /* Set the border color */
     border-radius: 10px;        /* Rounded corners */
-    padding: 20px;              /* Some padding inside the border */
-    margin: 10px;               /* Margin outside the border */
+    padding: 0px;              /* Some padding inside the border */
+    margin: 0px;               /* Margin outside the border */
     background-color: #e0f7fa;  /* Light blue background */
-    width: 600px;               /* Fixed width */
+    width: 100%;               /* Fixed width */
     height: 100%              /* Fixed height */
-    overflow-y: auto;           /* Enable vertical scrolling for overflow */
-    overflow-x: hidden;         /* Hide horizontal overflow */
+    
 }
+
+#forms {
+    border: 4px solid lightblue; /* Set the border color */
+    border-radius: 10px;        /* Rounded corners */
+    padding: 0px;              /* Some padding inside the border */
+    margin: 0px;               /* Margin outside the border */
+    background-color: #e0f7fa;  /* Light blue background */
+    width: 100%;               /* Fixed width */
+    height: 100%              /* Fixed height */
+    
+}
+
 
 	
 	
@@ -144,11 +154,7 @@
             <p><strong>What's your full name?</strong></p>
             <input type="text" id="PetitionerName1[0]" placeholder="Full Name"><br>
 			
-			<!--
-            <p><strong>What's your case number?</strong></p>
-			
-			-->
-			
+
 			
             <input type="text" id="CaseNumber[0]" placeholder="Case Number"><br>
             <p><strong>What's your street address?</strong></p>
@@ -156,14 +162,15 @@
          
 	
 			<input type="text" id="PetitionerCity[0]" class="PetitionerCity" placeholder="City">
+			<br>
 			<input type="text" id="PetitionerState[0]" class="PetitionerState" placeholder="State">
-
-			<!--
-			<input type="text" id="PetitionerZip[0]" placeholder="Zip"><br>
+			<br>
+			<input type="text" id="PetitionerZip[0]" placeholder="Zip">
+			<br>
             <p><strong>What's your phone number?</strong></p>
             <input type="text" id="PetitionerTel[0]" placeholder="Phone Number"><br>
             <br>
-            -->
+            
 			
 			<button class="next-button" onclick="saveData(); goToNext('questions1', 'questions2')">Next</button>
 
@@ -188,8 +195,10 @@
                 <input type="text" id="PetitionerEmployerAdd[0]" placeholder="Job Address">
             </div>
             <br>
-            <button class="next-button" onclick="goToNext('questions2', 'questions3')">Next</button>
+			
 			<button class="back-button" onclick="goToPrevious('questions2', 'questions1')">Back</button>
+            <button class="next-button" onclick="goToNext('questions2', 'questions3')">Next</button>
+			
 			
         </div>
 
@@ -210,27 +219,56 @@
                 <input type="text" id="StateBarNumber" placeholder="State Bar Number">
             </div>
             <br>
-            <button class="next-button" onclick="handleLawyerNext()">Next</button>
+            
 			<button class="back-button" onclick="goToPrevious('questions3', 'questions2')">Back</button>
+			<button class="next-button" onclick="handleLawyerNext()">Next</button>
         </div>
 
         <div id="questions4" style="display:none">
-            <h1>The end for now</h1>
+            <h1>You're all ready to go!</h1>
+			<button class="next-button" onclick="done(); goToNext('questions4', 'userProfile')">Continue</button>
         </div>
+		
+		
+		
+	
+		<center>
+		<div id="userProfile" style="display:none">
+    <h2>User Profile</h2>
+    <p><strong>State:</strong> <span id="userState"></span></p>
+    <p><strong>City:</strong> <span id="userCity"></span></p>
+	<br>
+	</div>
+	
+	
+	<br><br>
+	
+	
+	<div id="forms" style="display:none">
+	
+	<h1> My Forms </h1>
+	<br><br>
+	
+	<div class="pdf-container" >
+    <div id="pdfPreview">
+	<h3> Waive Court Fees </h3>
+        <iframe id="pdfFrame" style="width:100%; height:100%;"></iframe>
+    </div>
+    
+    <div id="pdfPreview2">
+	<h3> Small Claims Court </h3>
+        <iframe id="pdfFrame2" style="width:100%; height:100%;"></iframe>
+    </div>
+	</div>
+	</div>
+	
    
 	 </div>
 	
 	
-<br><br>
-	<div class="pdf-container" style="display:none">
-    <div id="pdfPreview" style="display:none">
-        <iframe id="pdfFrame" style="width:100%; height:100%;"></iframe>
-    </div>
-    
-    <div id="pdfPreview2" style="display:none">
-        <iframe id="pdfFrame2" style="width:100%; height:100%;"></iframe>
-    </div>
+
 </div>
+
 
 
 
@@ -269,11 +307,9 @@
 
 <br><br><br>
 
-<div id="userProfile" style="display:none">
-    <h2>User Profile</h2>
-    <p><strong>State:</strong> <span id="userState"></span></p>
-    <p><strong>City:</strong> <span id="userCity"></span></p>
-</div>
+
+
+
 
 <script>
 	
@@ -294,11 +330,16 @@ document.querySelectorAll('.PetitionerState').forEach(input => {
     input.addEventListener('input', () => propagateInput('PetitionerState'));
 });
 
+function done() {
+
+    document.getElementById('forms').style.display = 'block';
+}
+
 
 function displayUserProfile(state, city) {
     document.getElementById('userState').textContent = state;
     document.getElementById('userCity').textContent = city;
-    document.getElementById('userProfile').style.display = 'block';
+    //document.getElementById('userProfile').style.display = 'block';
 }
 
 // In the saveData() function
@@ -393,7 +434,7 @@ function logIn() {
         if (response.ok) {
             fetchData();  // Fetch user profile data right after login
             document.getElementById('questions').style.display = 'block';
-			document.getElementById('userProfile').style.display = 'block';
+			//document.getElementById('userProfile').style.display = 'block';
             document.getElementById('userForms').style.display = 'none';
             alert('Welcome back');
         } else {

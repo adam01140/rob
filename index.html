@@ -234,11 +234,45 @@
 
 <script>
 	
-	
-	
-	
-	
-	function saveData() {
+	document.addEventListener('DOMContentLoaded', function() {
+    checkLoginStatus();
+});
+
+function checkLoginStatus() {
+    fetch('/is_logged_in')
+    .then(response => response.json())
+    .then(data => {
+        if (data.logged_in) {
+            document.getElementById('questions').style.display = 'block';
+            document.getElementById('userForms').style.display = 'none';
+            fetchData();  // Fetch and populate fields if logged in
+        } else {
+            document.getElementById('questions').style.display = 'none';
+            document.getElementById('userForms').style.display = 'block';
+        }
+    })
+    .catch(error => {
+        console.error('Failed to verify login status:', error);
+        document.getElementById('questions').style.display = 'none';
+        document.getElementById('userForms').style.display = 'block';
+    });
+}
+
+
+function fetchData() {
+    fetch('/get_data')
+    .then(response => response.json())
+    .then(data => {
+        if (data.address) {
+            document.getElementById('PetitionerStrAddress[0]').value = data.address;
+        }
+        if (data.city) {
+            document.getElementById('PetitionerCity[0]').value = data.city;
+        }
+    });
+}
+
+function saveData() {
     const address = document.getElementById('PetitionerStrAddress[0]').value;
     const city = document.getElementById('PetitionerCity[0]').value;
     fetch('/save_data', {
@@ -255,8 +289,9 @@
 
 
 
+
 document.addEventListener('DOMContentLoaded', function () {
-    fetch('/check_login').then(response => {
+    fetch('/is_logged_in').then(response => {
         if (response.ok) {
             document.getElementById('questions').style.display = 'block';
             document.getElementById('userForms').style.display = 'none';
@@ -264,19 +299,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-
-function fetchData() {
-    fetch('/get_data')
-    .then(response => response.json())
-    .then(data => {
-        if (data.address) {
-            document.getElementById('PetitionerStrAddress[0]').value = data.address;
-        }
-        if (data.city) {
-            document.getElementById('PetitionerCity[0]').value = data.city;
-        }
-    });
-}
 
 
 
@@ -306,6 +328,7 @@ function signUp() {
 function logIn() {
     var username = document.getElementById('loginUsername').value;
     var password = document.getElementById('loginPassword').value;
+
     fetch('/login', {
         method: 'POST',
         headers: {
@@ -314,16 +337,17 @@ function logIn() {
         body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
     }).then(response => {
         if (response.ok) {
-            document.getElementById('questions').style.display = 'block'; // Show questions div
-            document.getElementById('userForms').style.display = 'none'; // Optionally hide the login form
+            console.log('Logged in with username:', username, 'and password:', password);  // Log the username and password
+            document.getElementById('questions').style.display = 'block';  // Show questions div
+            document.getElementById('userForms').style.display = 'none';  // Optionally hide the login form
         } else {
             response.text().then(text => alert(text));
         }
+    }).catch(error => {
+        console.error('Login failed:', error);
     });
 }
 
-
-	
 	
 	
 	

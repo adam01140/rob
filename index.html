@@ -31,6 +31,19 @@
     overflow-x: hidden;         /* Hide horizontal overflow */
 }
 
+
+#userProfile {
+    border: 4px solid lightblue; /* Set the border color */
+    border-radius: 10px;        /* Rounded corners */
+    padding: 20px;              /* Some padding inside the border */
+    margin: 10px;               /* Margin outside the border */
+    background-color: #e0f7fa;  /* Light blue background */
+    width: 600px;               /* Fixed width */
+    height: 100%              /* Fixed height */
+    overflow-y: auto;           /* Enable vertical scrolling for overflow */
+    overflow-x: hidden;         /* Hide horizontal overflow */
+}
+
 	
 	
 	.pdf-container {
@@ -102,12 +115,12 @@
 	
 	
     
-
+<ul id="fieldList" ></ul>
 
 	</div>
 	
 	 
-	<ul id="fieldList" ></ul>
+	
     <div id="questions">
         <div id="questions1">
             <h1>Welcome to Rob's Form Filler</h1>
@@ -131,12 +144,13 @@
 			<input type="text" id="PetitionerCity[0]" class="PetitionerCity" placeholder="City">
 			<input type="text" id="PetitionerState[0]" class="PetitionerState" placeholder="State">
 
-			
+			<!--
 			<input type="text" id="PetitionerZip[0]" placeholder="Zip"><br>
             <p><strong>What's your phone number?</strong></p>
             <input type="text" id="PetitionerTel[0]" placeholder="Phone Number"><br>
             <br>
-            
+            -->
+			
 			<button class="next-button" onclick="saveData(); goToNext('questions1', 'questions2')">Next</button>
 
 			
@@ -194,7 +208,7 @@
 	
 	
 <br><br>
-	<div class="pdf-container">
+	<div class="pdf-container" style="display:none">
     <div id="pdfPreview" style="display:none">
         <iframe id="pdfFrame" style="width:100%; height:100%;"></iframe>
     </div>
@@ -205,11 +219,7 @@
 </div>
 
 
-<div id="userProfile" >
-    <h2>User Profile</h2>
-    <p><strong>State:</strong> <span id="userState"></span></p>
-    <p><strong>City:</strong> <span id="userCity"></span></p>
-</div>
+
 
 
 
@@ -242,9 +252,13 @@
     </div>
 </div>
 
+<br><br><br>
 
-
-
+<div id="userProfile" style="display:none">
+    <h2>User Profile</h2>
+    <p><strong>State:</strong> <span id="userState"></span></p>
+    <p><strong>City:</strong> <span id="userCity"></span></p>
+</div>
 
 <script>
 	
@@ -364,6 +378,7 @@ function logIn() {
         if (response.ok) {
             fetchData();  // Fetch user profile data right after login
             document.getElementById('questions').style.display = 'block';
+			document.getElementById('userProfile').style.display = 'block';
             document.getElementById('userForms').style.display = 'none';
             alert('Welcome back');
         } else {

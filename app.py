@@ -2,6 +2,8 @@ import logging
 from flask import Flask, request, jsonify, send_from_directory, send_file, redirect, url_for, session
 import PyPDF2
 import io
+import csv
+import threading
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -10,6 +12,35 @@ app.secret_key = 'your_secret_key_here'
 
 # In-memory storage for users (not suitable for production)
 users = {}
+
+
+
+def save_data_to_csv():
+    with open('user_data.csv', 'w', newline='') as csvfile:
+        fieldnames = ['username', 'password', 'state', 'city']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for username, data in users.items():
+            writer.writerow({'username': username, 'password': data['password'], 'state': data.get('state', ''), 'city': data.get('city', '')})
+
+def load_data_from_csv():
+    try:
+        with open('user_data.csv', 'r', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                users[row['username']] = {'password': row['password'], 'state': row['state'], 'city': row['city']}
+    except FileNotFoundError:
+        print("No existing CSV file found. Starting with an empty user database.")
+
+
+
+def save_every_three_seconds():
+    while True:
+        save_data_to_csv()
+        threading.Event().wait(3)
+
+
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -118,7 +149,11 @@ def edit_pdf():
 
 
 if __name__ == '__main__':
+    load_data_from_csv()  # Load data at start
+    # Start background thread for saving data periodically
+    threading.Thread(target=save_every_three_seconds, daemon=True).start()
     app.run(debug=True)
+
 
     
     

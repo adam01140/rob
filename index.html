@@ -235,6 +235,52 @@
 <script>
 	
 	
+	
+	
+	
+	function saveData() {
+    const address = document.getElementById('PetitionerStrAddress[0]').value;
+    const city = document.getElementById('PetitionerCity[0]').value;
+    fetch('/save_data', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `address=${encodeURIComponent(address)}&city=${encodeURIComponent(city)}`
+    }).then(response => response.json())
+      .then(data => console.log(data));
+}
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/check_login').then(response => {
+        if (response.ok) {
+            document.getElementById('questions').style.display = 'block';
+            document.getElementById('userForms').style.display = 'none';
+            fetchData();  // Call this function to fetch and fill data
+        }
+    });
+});
+
+function fetchData() {
+    fetch('/get_data')
+    .then(response => response.json())
+    .then(data => {
+        if (data.address) {
+            document.getElementById('PetitionerStrAddress[0]').value = data.address;
+        }
+        if (data.city) {
+            document.getElementById('PetitionerCity[0]').value = data.city;
+        }
+    });
+}
+
+
+
+	
 // Hide questions div initially
 document.getElementById('questions').style.display = 'none';
 
@@ -277,17 +323,6 @@ function logIn() {
 }
 
 
-// Check if user is logged in when the page loads
-document.addEventListener('DOMContentLoaded', function () {
-    fetch('/check_login').then(response => {
-        if (response.ok) {
-            document.getElementById('questions').style.display = 'block';
-            document.getElementById('userForms').style.display = 'none';
-        }
-    });
-});	
-	
-	
 	
 	
 	

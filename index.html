@@ -20,7 +20,7 @@
     }
 
     #questions {
-    border: 2px solid lightblue; /* Set the border color */
+    border: 4px solid lightblue; /* Set the border color */
     border-radius: 10px;        /* Rounded corners */
     padding: 20px;              /* Some padding inside the border */
     margin: 10px;               /* Margin outside the border */
@@ -202,6 +202,161 @@
 	<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
 
 
+
+
+
+
+<div id="report" class="container" >
+        <h2>Report a Citation</h2>
+        <label for="citationNumber">Citation Number:</label>
+        <input type="text" id="citationNumber" required>
+        
+        <label for="timeOccurred">Time Occurred:</label>
+        <input type="datetime-local" id="timeOccurred" required>
+        
+        <label for="locationOccurred">Location Occurred:</label>
+        <input type="text" id="locationOccurred" required>
+        
+        <label for="licensePlate">License Plate Number:</label>
+        <input type="text" id="licensePlate" required>
+        
+        <button id="submitCitation">Report a Citation</button>
+        
+    </div>
+    <div id="list" class="container">
+        <h2>Citation List</h2>
+		<button id="fetchCitations">Fetch Citations</button> <!-- Added a button for fetching citations -->
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+	
+	
+	
+	
+	
+	
+        document.getElementById("submitCitation").addEventListener("click", function() {
+            const citationNumber = document.getElementById("citationNumber").value;
+            const timeOccurred = document.getElementById("timeOccurred").value;
+            const locationOccurred = document.getElementById("locationOccurred").value;
+            const licensePlate = document.getElementById("licensePlate").value;
+            
+            fetch('https://signin0114-10530df3aff0.herokuapp.com/api/citations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    citationNumber,
+                    timeOccurred,
+                    locationOccurred,
+                    licensePlate,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById("fetchCitations").addEventListener("click", function() {
+		
+	
+				//dude lets go
+				
+            //const password = prompt("Please enter the password:");
+            fetch(`https://signin0114-10530df3aff0.herokuapp.com/api/citations?password=${encodeURIComponent(password)}`, {
+                method: 'GET',
+            })
+            .then(response => {
+                if (!response.ok) {
+                    //throw new Error('Unauthorized access or error fetching data.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const listDiv = document.getElementById("list");
+                listDiv.innerHTML = "<h2>License Plates:</h2>";
+                data.forEach(citation => {
+                    const p = document.createElement("p");
+                    p.textContent = `${citation.licensePlate}`;
+                    listDiv.appendChild(p);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Unauthorized access or error fetching data.');
+            });
+        });
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		document.getElementById("fetchCitations").addEventListener("click", function() {
+    const username = prompt("Please enter the username:");
+    const password = prompt("Please enter the password:");
+    if (username === "adam0114") {
+        fetch(`https://signin0114-10530df3aff0.herokuapp.com/api/citations?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
+            method: 'GET',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Unauthorized access or error fetching data.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const listDiv = document.getElementById("list");
+            listDiv.innerHTML = "<h2>License Plates:</h2>";
+            data.forEach(citation => {
+                const p = document.createElement("p");
+                p.textContent = `${citation.licensePlate}`;
+                listDiv.appendChild(p);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Unauthorized access or error fetching data.');
+        });
+    } else {
+        alert('Unauthorized access: Incorrect username');
+    }
+});
+
+		
+		
+    </script>
 
     <script>
 	

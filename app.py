@@ -26,6 +26,10 @@ def signup():
         return 'Username already exists', 409
     users[username] = password
     return redirect(url_for('login'))
+    
+    
+    
+   
 
 @app.route('/login', methods=['POST'])
 def login():

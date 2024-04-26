@@ -182,12 +182,12 @@
         <div id="questions4" style="display:none">
             <h1>The end for now</h1>
         </div>
-    </div>
-	
+   
+	 </div>
 	
 	
 <br><br>
-	<div class="pdf-container">
+	<div class="pdf-container" style="display:none">
     <div id="pdfPreview" style="display:none">
         <iframe id="pdfFrame" style="width:100%; height:100%;"></iframe>
     </div>
@@ -234,30 +234,6 @@
 
 <script>
 	
-	document.addEventListener('DOMContentLoaded', function() {
-    checkLoginStatus();
-});
-
-function checkLoginStatus() {
-    fetch('/is_logged_in')
-    .then(response => response.json())
-    .then(data => {
-        if (data.logged_in) {
-            document.getElementById('questions').style.display = 'block';
-            document.getElementById('userForms').style.display = 'none';
-            fetchData();  // Fetch and populate fields if logged in
-        } else {
-            document.getElementById('questions').style.display = 'none';
-            document.getElementById('userForms').style.display = 'block';
-        }
-    })
-    .catch(error => {
-        console.error('Failed to verify login status:', error);
-        document.getElementById('questions').style.display = 'none';
-        document.getElementById('userForms').style.display = 'block';
-    });
-}
-
 
 function fetchData() {
     fetch('/get_data')
@@ -290,15 +266,6 @@ function saveData() {
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    fetch('/is_logged_in').then(response => {
-        if (response.ok) {
-            document.getElementById('questions').style.display = 'block';
-            document.getElementById('userForms').style.display = 'none';
-            fetchData();  // Call this function to fetch and fill data
-        }
-    });
-});
 
 
 
@@ -328,7 +295,6 @@ function signUp() {
 function logIn() {
     var username = document.getElementById('loginUsername').value;
     var password = document.getElementById('loginPassword').value;
-
     fetch('/login', {
         method: 'POST',
         headers: {
@@ -337,9 +303,9 @@ function logIn() {
         body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
     }).then(response => {
         if (response.ok) {
-            console.log('Logged in with username:', username, 'and password:', password);  // Log the username and password
             document.getElementById('questions').style.display = 'block';  // Show questions div
             document.getElementById('userForms').style.display = 'none';  // Optionally hide the login form
+			alert('Welcome back');
         } else {
             response.text().then(text => alert(text));
         }
@@ -348,7 +314,7 @@ function logIn() {
     });
 }
 
-	
+
 	
 	
 	

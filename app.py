@@ -17,7 +17,7 @@ def signup():
     password = request.form['password']
     if username in users:
         return 'Username already exists', 409
-    users[username] = password
+    users[username] = {'password': password, 'state': '', 'city': ''}  # Initialize with empty state and city
     return redirect(url_for('login'))
     
     
@@ -28,9 +28,20 @@ def save_data():
     username = session.get('user')
     if not username:
         return jsonify({'error': 'User not logged in'}), 401
-    users[username] = {'state': state, 'city': city}  # Ensure data structure is correct
+    if username in users:
+        users[username].update({'state': state, 'city': city})  # Update state and city without removing password
     print(f"Data saved for {username}: {users[username]}")
     return jsonify(success=True)
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+    if username in users and users[username]['password'] == password:
+        session['user'] = username
+        return redirect(url_for('index'))
+    return 'Invalid credentials', 401
+
 
 
 @app.route('/get_data', methods=['GET'])
@@ -43,14 +54,7 @@ def get_data():
 
    
 
-@app.route('/login', methods=['POST'])
-def login():
-    username = request.form['username']
-    password = request.form['password']
-    if username in users and users[username] == password:
-        session['user'] = username
-        return redirect(url_for('index'))
-    return 'Invalid credentials', 401
+
 
 @app.route('/logout')
 def logout():

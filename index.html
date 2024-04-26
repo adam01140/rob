@@ -127,8 +127,9 @@
             <p><strong>What's your street address?</strong></p>
             <input type="text" id="PetitionerStrAddress[0]" placeholder="Street"><br>
          
-			<input type="text" id="PetitionerCity[0]" placeholder="City">
-			<input type="text" id="PetitionerState[0]" placeholder="State">
+	
+			<input type="text" id="PetitionerCity[0]" class="PetitionerCity" placeholder="City">
+			<input type="text" id="PetitionerState[0]" class="PetitionerState" placeholder="State">
 
 			
 			<input type="text" id="PetitionerZip[0]" placeholder="Zip"><br>
@@ -247,6 +248,23 @@
 
 <script>
 	
+	
+	
+function propagateInput(className) {
+    var inputs = document.getElementsByClassName(className);
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].value = event.target.value;
+    }
+}
+
+// Attach this function to the input event of each class
+document.querySelectorAll('.PetitionerCity').forEach(input => {
+    input.addEventListener('input', () => propagateInput('PetitionerCity'));
+});
+document.querySelectorAll('.PetitionerState').forEach(input => {
+    input.addEventListener('input', () => propagateInput('PetitionerState'));
+});
+
 
 function displayUserProfile(state, city) {
     document.getElementById('userState').textContent = state;
@@ -256,8 +274,10 @@ function displayUserProfile(state, city) {
 
 // In the saveData() function
 function saveData() {
-    const state = document.getElementById('PetitionerState[0]').value;
-    const city = document.getElementById('PetitionerCity[0]').value;
+    // Using class to get value; it doesn't matter which one since all are synced
+    const state = document.querySelector('.PetitionerState').value;
+    const city = document.querySelector('.PetitionerCity').value;
+
     console.log('Sending data to server:', { state, city });
 
     fetch('/save_data', {
@@ -278,6 +298,7 @@ function saveData() {
         console.error('Error saving data:', error);
     });
 }
+
 
 
 

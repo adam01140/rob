@@ -1,16 +1,9 @@
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
+import logging
 from flask import Flask, request, jsonify, send_from_directory, send_file, redirect, url_for, session
 import PyPDF2
 import io
+
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 app.secret_key = 'your_secret_key_here'
@@ -28,7 +21,26 @@ def signup():
     return redirect(url_for('login'))
     
     
-    
+@app.route('/save_data', methods=['POST'])
+def save_data():
+    state = request.form['state']
+    city = request.form['city']
+    username = session.get('user')
+    if not username:
+        return jsonify({'error': 'User not logged in'}), 401
+    users[username] = {'state': state, 'city': city}  # Ensure data structure is correct
+    print(f"Data saved for {username}: {users[username]}")
+    return jsonify(success=True)
+
+
+@app.route('/get_data', methods=['GET'])
+def get_data():
+    username = session.get('user')
+    if not username:
+        return jsonify({'error': 'User not logged in'}), 401
+    user_data = users.get(username, {'state': '', 'city': ''})
+    return jsonify(user_data)
+
    
 
 @app.route('/login', methods=['POST'])

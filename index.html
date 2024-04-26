@@ -97,7 +97,9 @@
 	<div id="edit" >
     <button id="editPDF" style="display:none;" onclick="editPDF()">Edit PDF</button>
 	</div>
-	<ul id="fieldList" ></ul>
+	
+	
+	
 	
     
 
@@ -105,7 +107,7 @@
 	</div>
 	
 	 
-	
+	<ul id="fieldList" ></ul>
     <div id="questions">
         <div id="questions1">
             <h1>Welcome to Rob's Form Filler</h1>
@@ -124,14 +126,18 @@
             <input type="text" id="CaseNumber[0]" placeholder="Case Number"><br>
             <p><strong>What's your street address?</strong></p>
             <input type="text" id="PetitionerStrAddress[0]" placeholder="Street"><br>
-            <input type="text" id="PetitionerCity[0]" placeholder="City"><br>
-            <input type="text" id="PetitionerState[0]" placeholder="State"><br>
-            <input type="text" id="PetitionerZip[0]" placeholder="Zip"><br>
+         
+			<input type="text" id="PetitionerCity[0]" placeholder="City">
+			<input type="text" id="PetitionerState[0]" placeholder="State">
+
+			
+			<input type="text" id="PetitionerZip[0]" placeholder="Zip"><br>
             <p><strong>What's your phone number?</strong></p>
             <input type="text" id="PetitionerTel[0]" placeholder="Phone Number"><br>
             <br>
-            <button class="next-button" onclick="goToNext('questions1', 'questions2')">Next</button>
-			
+            
+			<button class="next-button" onclick="saveData(); goToNext('questions1', 'questions2')">Next</button>
+
 			
         </div>
 	
@@ -187,7 +193,7 @@
 	
 	
 <br><br>
-	<div class="pdf-container" style="display:none">
+	<div class="pdf-container">
     <div id="pdfPreview" style="display:none">
         <iframe id="pdfFrame" style="width:100%; height:100%;"></iframe>
     </div>
@@ -195,6 +201,13 @@
     <div id="pdfPreview2" style="display:none">
         <iframe id="pdfFrame2" style="width:100%; height:100%;"></iframe>
     </div>
+</div>
+
+
+<div id="userProfile" >
+    <h2>User Profile</h2>
+    <p><strong>State:</strong> <span id="userState"></span></p>
+    <p><strong>City:</strong> <span id="userCity"></span></p>
 </div>
 
 
@@ -235,31 +248,56 @@
 <script>
 	
 
-function fetchData() {
-    fetch('/get_data')
-    .then(response => response.json())
-    .then(data => {
-        if (data.address) {
-            document.getElementById('PetitionerStrAddress[0]').value = data.address;
-        }
-        if (data.city) {
-            document.getElementById('PetitionerCity[0]').value = data.city;
-        }
-    });
+function displayUserProfile(state, city) {
+    document.getElementById('userState').textContent = state;
+    document.getElementById('userCity').textContent = city;
+    document.getElementById('userProfile').style.display = 'block';
 }
 
+// In the saveData() function
 function saveData() {
-    const address = document.getElementById('PetitionerStrAddress[0]').value;
+    const state = document.getElementById('PetitionerState[0]').value;
     const city = document.getElementById('PetitionerCity[0]').value;
+    console.log('Sending data to server:', { state, city });
+
     fetch('/save_data', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `address=${encodeURIComponent(address)}&city=${encodeURIComponent(city)}`
-    }).then(response => response.json())
-      .then(data => console.log(data));
+        body: `state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to save data');
+        }
+        return response.json();
+    }).then(data => {
+        console.log('Data saved successfully:', data);
+        fetchData(); // Fetch updated profile data after save
+    }).catch(error => {
+        console.error('Error saving data:', error);
+    });
 }
+
+
+
+function fetchData() {
+    console.log('Fetching data from server');
+    fetch('/get_data')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch');
+        }
+        return response.json();
+    }).then(data => {
+        console.log('Data received from server:', data);
+        if (data.state && data.city) {
+            displayUserProfile(data.state, data.city);
+        }
+    }).catch(error => console.error('Failed to fetch or parse data:', error));
+}
+
+
 
 
 
@@ -303,9 +341,10 @@ function logIn() {
         body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
     }).then(response => {
         if (response.ok) {
-            document.getElementById('questions').style.display = 'block';  // Show questions div
-            document.getElementById('userForms').style.display = 'none';  // Optionally hide the login form
-			alert('Welcome back');
+            fetchData();  // Fetch user profile data right after login
+            document.getElementById('questions').style.display = 'block';
+            document.getElementById('userForms').style.display = 'none';
+            alert('Welcome back');
         } else {
             response.text().then(text => alert(text));
         }
@@ -313,7 +352,6 @@ function logIn() {
         console.error('Login failed:', error);
     });
 }
-
 
 	
 	
@@ -379,16 +417,18 @@ function goToPrevious(currentDivId, prevDivId) {
 
     function goToNext(currentDivId, nextDivId) {
 	
-		editPDF();
-        var currentDiv = document.getElementById(currentDivId);
-        var nextDiv = document.getElementById(nextDivId);
-        if (!currentDiv || !nextDiv) {
-            console.error('One of the divs was not found.');
-            return;
-        }
-        currentDiv.style.display = 'none';
-        nextDiv.style.display = 'block';
+    editPDF();  // Assuming this sends updates to the server.
+    var currentDiv = document.getElementById(currentDivId);
+    var nextDiv = document.getElementById(nextDivId);
+    if (!currentDiv || !nextDiv) {
+        console.error('One of the divs was not found.');
+        return;
     }
+    currentDiv.style.display = 'none';
+    nextDiv.style.display = 'block';
+    fetchData();  // Fetch the latest user profile data after moving to the next section.
+}
+
 
     function uploadPDF() {
         var fileInput = document.getElementById('pdfFile');

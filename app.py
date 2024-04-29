@@ -42,6 +42,7 @@ def save_every_three_seconds():
 
 
 
+
 @app.route('/signup', methods=['POST'])
 def signup():
     username = request.form['username']
@@ -60,9 +61,12 @@ def save_data():
     if not username:
         return jsonify({'error': 'User not logged in'}), 401
     if username in users:
-        users[username].update({'state': state, 'city': city})  # Update state and city without removing password
-    print(f"Data saved for {username}: {users[username]}")
-    return jsonify(success=True)
+        users[username].update({'state': state, 'city': city})
+        save_data_to_csv()  # Save to CSV immediately after update
+        print(f"Data saved for {username}: {users[username]}")
+        return jsonify(success=True)
+    else:
+        return jsonify({'error': 'User does not exist'}), 404
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -150,9 +154,8 @@ def edit_pdf():
 
 if __name__ == '__main__':
     load_data_from_csv()  # Load data at start
-    # Start background thread for saving data periodically
-    threading.Thread(target=save_every_three_seconds, daemon=True).start()
     app.run(debug=True)
+
 
 
     

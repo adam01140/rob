@@ -9,12 +9,6 @@
 
 
 
-body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        padding: 20px;
-        text-align: center;
-    }
 
 
 
@@ -56,7 +50,7 @@ body {
     border-radius: 10px;        /* Rounded corners */
     padding: 0px;              /* Some padding inside the border */
     margin: 0px;               /* Margin outside the border */
-    background-color: #e0f7fa;  /* Light blue background */
+    background-color: #ffffff;  /* Light blue background */
     width: 100%;               /* Fixed width */
     height: 100%              /* Fixed height */
     
@@ -67,7 +61,7 @@ body {
     border-radius: 10px;        /* Rounded corners */
     padding: 0px;              /* Some padding inside the border */
     margin: 0px;               /* Margin outside the border */
-    background-color: #e0f7fa;  /* Light blue background */
+    background-color: #ffffff;  /* Light blue background */
     width: 100%;               /* Fixed width */
     height: 100%              /* Fixed height */
     
@@ -89,7 +83,7 @@ body {
     border-radius: 10px;
     padding: 20px;
     margin: 10px;
-    background-color: #e0f7fa;
+    background-color: #ffffff;
     width: 45%;  /* Adjust width to make sure they do not squash together */
     height: 600px;  /* Optional: Adjust height as necessary */
     overflow-y: auto;
@@ -98,7 +92,7 @@ body {
 
 #pdfFrame, #pdfFrame2 {
     width: 100%;  /* Ensure it takes the full width of its parent */
-    height: 100%;  /* Ensure it takes the full height of its parent */
+    height: 550px;  /* Ensure it takes the full height of its parent */
     border: none;  /* Remove any default border */
 }
 
@@ -152,6 +146,8 @@ body {
 	 
 	
     <div id="questions">
+	
+	<br><br>
         <div id="questions1">
             <h1>Welcome to Rob's Form Filler</h1>
 			
@@ -161,6 +157,8 @@ body {
             <input type="text" id="PetitionerName1[0]" placeholder="Full Name"><br>
 			
 
+			
+            <input type="text" id="CaseNumber[0]" placeholder="Case Number"><br>
             <p><strong>What's your street address?</strong></p>
             <input type="text" id="PetitionerStrAddress[0]" placeholder="Street"><br>
          
@@ -174,11 +172,10 @@ body {
             <p><strong>What's your phone number?</strong></p>
             <input type="text" id="PetitionerTel[0]" placeholder="Phone Number"><br>
             <br>
-			<p><strong>What's your email?</strong></p>
-            <input type="text" id="PetitionerEmail[0]" placeholder="Phone Number"><br>
-            <br>
             
-<button class="next-button" onclick="done(); goToNext('questions4', 'userProfile')">Continue</button>
+			
+			<button class="next-button" onclick="saveData(); goToNext('questions1', 'questions2')">Next</button>
+
 			
         </div>
 	
@@ -230,7 +227,7 @@ body {
         </div>
 
         <div id="questions4" style="display:none">
-            <h1>User Profile Complete!</h1>
+            <h1>You're all ready to go!</h1>
 			<button class="next-button" onclick="done(); goToNext('questions4', 'userProfile')">Continue</button>
         </div>
 		
@@ -252,22 +249,49 @@ body {
 	<div id="forms" style="display:none">
 	
 	<h1> My Forms </h1>
-	<br><br>
 	
-	<div class="pdf-container" >
+	<div class="pdf-container">
     <div id="pdfPreview">
-	<h3> Waive Court Fees </h3>
-        <iframe id="pdfFrame" style="width:100%; height:100%;"></iframe>
+        <h3>Waive Court Fees</h3>
+		
+		<br>
+		<button class="next-button"  onclick="downloadPDF('pdfFrame')">Download PDF</button>
+		<br>
+		
+		<!--<button class="next-button"  onclick="waive()">Preview PDF</button>
+		-->
+		
+		<br><br>
+		<div id="waive" id="pdfFrame" >
+        <iframe id="pdfFrame" ></iframe>
+        </div>
+		
+		<br><br>
     </div>
-    
+
     <div id="pdfPreview2">
-	<h3> Small Claims Court </h3>
-        <iframe id="pdfFrame2" style="width:100%; height:100%;"></iframe>
+        <h3>Small Claims Court</h3>
+		
+		<br>
+		<button class="next-button"  onclick="downloadPDF('pdfFrame2')">Download PDF</button>
+		<br>
+		
+		<!--<button class="next-button"  onclick="small()">Preview PDF</button>
+		-->
+		
+		<br><br>
+		<div id="small" id="pdfFrame2" >
+        <iframe id="pdfFrame2" ></iframe>
+        </div>
+		
+		<br><br>
+		
     </div>
-	</div>
+</div>
+
 	</div>
 	
-   
+   <br>
 	 </div>
 	
 	
@@ -292,31 +316,23 @@ body {
 
 
 
-
+<br><br>
 
 <div id="userForms">
-
-<h1> Welcome To Rob's Form Filler </h1>
-
-<br>
-
-<div>
-        <h2>Log In</h2>
-        <input type="text" id="loginUsername" placeholder="Username">
-        <input type="password" id="loginPassword" placeholder="Password">
-        <button onclick="logIn()">Log In</button>
-    </div>
-	
-	<br><br>
     <div>
         <h2>Sign Up</h2>
         <input type="text" id="signupUsername" placeholder="Username">
         <input type="password" id="signupPassword" placeholder="Password">
         <button onclick="signUp()">Sign Up</button>
     </div>
-	<br><br><br><br>
-   
-	
+	<br><br>
+    <div>
+        <h2>Log In</h2>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="logIn()">Log In</button>
+    </div>
+	<br><br>
 </div>
 
 <br><br><br>
@@ -326,8 +342,31 @@ body {
 
 
 <script>
+
+function waive() {
+
+    document.getElementById('waive').style.display = 'block';
+}
+
+
+function small() {
+
+    document.getElementById('small').style.display = 'block';
+}
+
+function downloadPDF(frameId) {
+    var iframe = document.getElementById(frameId);
+    var url = iframe.src; // Get the current src of the iframe which points to the PDF blob
+
+    // Create a temporary anchor element and trigger a download
+    var downloadLink = document.createElement("a");
+    downloadLink.href = url;
+    downloadLink.download = frameId + ".pdf"; // Optional: You can specify a default filename here
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
 	
-var warning = "hello";
 	
 	
 function propagateInput(className) {
@@ -345,48 +384,22 @@ document.querySelectorAll('.PetitionerState').forEach(input => {
     input.addEventListener('input', () => propagateInput('PetitionerState'));
 });
 
-// Function to set a cookie
-function setCookie(name, value, days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+
+function waive() {
+
+    document.getElementById('waive').style.display = 'block';
 }
 
-// Function to get a cookie
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
+function smallcourts() {
+
+    document.getElementById('small').style.display = 'block';
 }
 
-// Function to check cookie on load and redirect if necessary
-window.onload = function() {
-    //if (getCookie("completedQuestions") === "true") {
-        //window.location.href = 'profile.html'; // Redirect if cookie is set
-    //} else {
-        // Load default PDFs if not redirected
-        loadDefaultPDF();
-        loadSecondaryPDF();
-    //}
-};
 
-
-// Adjust the done function to set a cookie and redirect
 function done() {
-   // document.getElementById('forms').style.display = 'block';
-    setCookie("completedQuestions", "true", 7); // Set cookie for 7 days
-    window.location.href = 'profile.html'; // Redirect to profile.html
-}
 
+    document.getElementById('forms').style.display = 'block';
+}
 
 
 function displayUserProfile(state, city) {
@@ -466,19 +479,13 @@ function signUp() {
         body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
     }).then(response => {
         if (response.ok) {
-            //alert('Signup successful!');
+            alert('Signup successful!');
             window.location.href = '/'; // Redirect to home page
         } else {
-		
-		
-        //response.text().then(text => alert(text));
+            alert('Signup successful!');
         }
     });
 }
-
-
-
-
 
 function logIn() {
     var username = document.getElementById('loginUsername').value;
@@ -491,23 +498,18 @@ function logIn() {
         body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
     }).then(response => {
         if (response.ok) {
-            // Fetch user profile data right after login
-            fetchData();
-            if(getCookie("completedQuestions1") === "true") {
-                window.location.href = 'profile.html'; // Redirect if form is already completed
-            } else {
-                document.getElementById('questions').style.display = 'block';
-                document.getElementById('userForms').style.display = 'none';
-            }
-            //response.text().then(text => alert(text));
+            fetchData();  // Fetch user profile data right after login
+            document.getElementById('questions').style.display = 'block';
+			//document.getElementById('userProfile').style.display = 'block';
+            document.getElementById('userForms').style.display = 'none';
+            alert('Welcome');
         } else {
-            //response.text().then(text => alert(text));
+            response.text().then(text => alert(text));
         }
     }).catch(error => {
         console.error('Login failed:', error);
     });
 }
-
 
 	
 	
@@ -544,7 +546,7 @@ function goToPrevious(currentDivId, prevDivId) {
             var firmName = document.getElementById('FirmName').value;
             var stateBarNumber = document.getElementById('StateBarNumber').value;
             if (!lawyerName || !firmName || !stateBarNumber) {
-                //alert('Please fill all lawyer information fields.');
+                alert('Please fill all lawyer information fields.');
                 return;
             }
             lawyerInfo = `My lawyer's name is ${lawyerName}, their law firm is ${firmName}, and their state bar number is ${stateBarNumber}.`;
@@ -593,7 +595,7 @@ function goToPrevious(currentDivId, prevDivId) {
             uploadedPdfFile = file; // Save the uploaded file globally
             displayPDF(file);
         } else {
-            //alert('Please select a PDF file to upload.');
+            alert('Please select a PDF file to upload.');
         }
     }
 
@@ -611,7 +613,7 @@ function goToPrevious(currentDivId, prevDivId) {
             })
             .catch(error => {
                 console.error('Error loading default PDF:', error);
-                //alert('Error loading default PDF: ' + error.message);
+                alert('Error loading default PDF: ' + error.message);
             });
 			
 		
@@ -646,7 +648,7 @@ data.fields.forEach(field => {
         })
         .catch(error => {
             console.error('Error processing PDF:', error);
-            //alert('Error processing PDF: ' + error.message);
+            alert('Error processing PDF: ' + error.message);
         });
     }
 	
@@ -676,7 +678,7 @@ data.fields.forEach(field => {
 
     function editPDF() {
         if (!uploadedPdfFile) {
-            //alert('No PDF file is loaded for editing.');
+            alert('No PDF file is loaded for editing.');
             return;
         }
         var formData = new FormData();
@@ -704,18 +706,22 @@ data.fields.forEach(field => {
         .then(blob => {
             var url = window.URL.createObjectURL(blob);
             document.getElementById('pdfFrame').src = url;
-            document.getElementById('pdfPreview').style.display = 'block';
+            //document.getElementById('pdfPreview').style.display = 'block';
 			
 			document.getElementById('pdfFrame2').src = url;
-            document.getElementById('pdfPreview2').style.display = 'block';
+            //document.getElementById('pdfPreview2').style.display = 'block';
         })
         .catch(error => {
             console.error('Error updating PDF:', error);
-            //alert('Error updating PDF: ' + error.message);
+            alert('Error updating PDF: ' + error.message);
         });
     }
 
-    
+    // Automatically load the default PDF when the page loads
+    window.onload = function() {
+        loadDefaultPDF();
+    };
+	
 	
 	
 	
@@ -726,17 +732,27 @@ data.fields.forEach(field => {
         .then(blob => {
             var url = window.URL.createObjectURL(blob);
             document.getElementById('pdfFrame2').src = url;
-            document.getElementById('pdfPreview2').style.display = 'block';
+            //document.getElementById('pdfPreview2').style.display = 'block';
         })
         .catch(error => {
             console.error('Error loading second PDF:', error);
-            //alert('Error loading second PDF: ' + error.message);
+            alert('Error loading second PDF: ' + error.message);
         });
 }
 
 
 
 
+
+
+
+
+
+
+window.onload = function() {
+    loadDefaultPDF();
+    loadSecondaryPDF(); // This will also load the second PDF on page load.
+};
 
 
 		

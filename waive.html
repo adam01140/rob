@@ -2,19 +2,44 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>PDF Field Extractor</title>
-</head>
-
+<title>User Profile</title>
 <style>
-
-
-
-body {
+    body {
         font-family: Arial, sans-serif;
         background-color: #f4f4f9;
         padding: 20px;
         text-align: center;
     }
+
+    button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    #userProfile {
+        border: 4px solid lightblue;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 10px auto;
+        background-color: #ffffff;
+        width: 50%;
+       
+    }
+</style>
+
+
+<style>
+
+
+
 
 
 
@@ -32,7 +57,7 @@ body {
     margin: 10px;               /* Margin outside the border */
     background-color: #ffffff;  /* Light blue background */
     width: 600px;               /* Fixed width */
-    height: 100%              /* Fixed height */
+    height: 100%;              /* Fixed height */
     overflow-y: auto;           /* Enable vertical scrolling for overflow */
     overflow-x: hidden;         /* Hide horizontal overflow */
 }
@@ -47,32 +72,22 @@ body {
     background-color: #ffffff;  /* Light blue background */
     width: 600px;               /* Fixed width */
     height: 100%              /* Fixed height */
-    
+    overflow-y: auto;           /* Enable vertical scrolling for overflow */
+    overflow-x: hidden;         /* Hide horizontal overflow */
 }
 
 
 #userProfile {
     border: 4px solid lightblue; /* Set the border color */
     border-radius: 10px;        /* Rounded corners */
-    padding: 0px;              /* Some padding inside the border */
+    padding: 20px;              /* Some padding inside the border */
     margin: 0px;               /* Margin outside the border */
-    background-color: #e0f7fa;  /* Light blue background */
+    background-color: #ffffff;  /* Light blue background */
     width: 100%;               /* Fixed width */
     height: 100%              /* Fixed height */
-    
+    overflow-y: auto;           /* Enable vertical scrolling for overflow */
+    overflow-x: hidden;         /* Hide horizontal overflow */
 }
-
-#forms {
-    border: 4px solid lightblue; /* Set the border color */
-    border-radius: 10px;        /* Rounded corners */
-    padding: 0px;              /* Some padding inside the border */
-    margin: 0px;               /* Margin outside the border */
-    background-color: #e0f7fa;  /* Light blue background */
-    width: 100%;               /* Fixed width */
-    height: 100%              /* Fixed height */
-    
-}
-
 
 	
 	
@@ -81,6 +96,8 @@ body {
     justify-content: space-around; /* Distributes space between and around content items */
     align-items: start; /* Aligns items to be flex-start aligned */
     margin-top: 20px;
+	height: 100%;
+	width: 100%;
 }
 
 #pdfPreview, #pdfPreview2 {
@@ -88,10 +105,10 @@ body {
     border: 2px solid lightblue;
     border-radius: 10px;
     padding: 20px;
-    margin: 10px;
-    background-color: #e0f7fa;
-    width: 45%;  /* Adjust width to make sure they do not squash together */
-    height: 600px;  /* Optional: Adjust height as necessary */
+    margin: 0px;
+    background-color: #ffffff;
+    width: 100%;  /* Adjust width to make sure they do not squash together */
+    height: 750px;  /* Optional: Adjust height as necessary */
     overflow-y: auto;
     box-sizing: border-box; /* Includes padding and borders in the element's total width and height */
 }
@@ -125,7 +142,22 @@ body {
 </style>
 
 
+</head>
 <body>
+
+<h1>Waive Court Fees Form</h1>
+
+		<div id="userProfile" style="display:none;">
+    <h2>User Profile</h2>
+    <p><strong>State:</strong> <span id="userState"></span></p>
+    <p><strong>City:</strong> <span id="userCity"></span></p>
+	<br>
+	</div>
+
+
+
+
+
 <center>
 
 
@@ -141,7 +173,7 @@ body {
     <button id="editPDF" style="display:none;" onclick="editPDF()">Edit PDF</button>
 	</div>
 	
-	
+	<button onclick="back()">Back</button>
 	
 	
     
@@ -152,38 +184,40 @@ body {
 	 
 	
     <div id="questions">
-        <div id="questions1">
-            <h1>Welcome to Rob's Form Filler</h1>
+        <div id="questions1" style="display:none">
+            <h1>Waive Court Fees Form</h1>
 			
 			<br>
 			<h2>
             <p><strong>What's your full name?</strong></p>
             <input type="text" id="PetitionerName1[0]" placeholder="Full Name"><br>
-			
 
-            <p><strong>What's your street address?</strong></p>
-            <input type="text" id="PetitionerStrAddress[0]" placeholder="Street"><br>
-         
-	
+			<br>
+			<br>
+			<p><strong>What's your street address?</strong></p>
+            <input type="text" id="PetitionerStrAddress[0]" placeholder="Street"> 
+			<br>
 			<input type="text" id="PetitionerCity[0]" class="PetitionerCity" placeholder="City">
 			<br>
 			<input type="text" id="PetitionerState[0]" class="PetitionerState" placeholder="State">
 			<br>
-			<input type="text" id="PetitionerZip[0]" placeholder="Zip">
-			<br>
-            <p><strong>What's your phone number?</strong></p>
+			<input type="text" id="PetitionerZip[0]" placeholder="Zip"><br>
+            <br>
+			<p><strong>What's your phone number?</strong></p>
             <input type="text" id="PetitionerTel[0]" placeholder="Phone Number"><br>
             <br>
-			<p><strong>What's your email?</strong></p>
-            <input type="text" id="PetitionerEmail[0]" placeholder="Phone Number"><br>
-            <br>
-            
-<button class="next-button" onclick="done(); goToNext('questions4', 'userProfile')">Continue</button>
+        
+			
+			<button class="next-button" onclick="saveData(); goToNext('questions1', 'questions2')">Next</button>
+
 			
         </div>
 	
 	
-        <div id="questions2" style="display:none">
+        <div id="questions2">
+		
+		
+		
             <h1>Employment Information</h1>
             <p><strong>Are you currently employed?</strong></p>
             <select id="employmentStatus" onchange="toggleEmploymentFields()">
@@ -199,11 +233,12 @@ body {
                 <p><strong>What's your job address?</strong></p>
                 <input type="text" id="PetitionerEmployerAdd[0]" placeholder="Job Address">
             </div>
-            <br>
+            <br><br>
 			
-			<button class="back-button" onclick="goToPrevious('questions2', 'questions1')">Back</button>
+			
             <button class="next-button" onclick="goToNext('questions2', 'questions3')">Next</button>
 			
+			<br><br>
 			
         </div>
 
@@ -224,56 +259,41 @@ body {
                 <input type="text" id="StateBarNumber" placeholder="State Bar Number">
             </div>
             <br>
+			
+			<p><strong>What's your case number?</strong></p>
+            <input type="text" id="CaseNumber[0]" placeholder="Case Number"><br>
+            
+			<br>
             
 			<button class="back-button" onclick="goToPrevious('questions3', 'questions2')">Back</button>
 			<button class="next-button" onclick="handleLawyerNext()">Next</button>
-        </div>
+		</div>
 
         <div id="questions4" style="display:none">
-            <h1>User Profile Complete!</h1>
-			<button class="next-button" onclick="done(); goToNext('questions4', 'userProfile')">Continue</button>
-        </div>
-		
-		
-		
-	
-		<center>
-		<div id="userProfile" style="display:none">
-    <h2>User Profile</h2>
-    <p><strong>State:</strong> <span id="userState"></span></p>
-    <p><strong>City:</strong> <span id="userCity"></span></p>
-	<br>
-	</div>
-	
-	
-	<br><br>
-	
-	
-	<div id="forms" style="display:none">
-	
-	<h1> My Forms </h1>
-	<br><br>
-	
-	<div class="pdf-container" >
-    <div id="pdfPreview">
-	<h3> Waive Court Fees </h3>
+            <h1>Form Complete!</h1>
+			<button class="back-button" onclick="revealForm()">Access Form</button>
+			
+			
+			
+			<div class="pdf-container" id="pdf-container" style="display:none">
+    <div id="pdfPreview" style="display:none">
         <iframe id="pdfFrame" style="width:100%; height:100%;"></iframe>
     </div>
     
-    <div id="pdfPreview2">
-	<h3> Small Claims Court </h3>
+    <div id="pdfPreview2" style="display:none">
         <iframe id="pdfFrame2" style="width:100%; height:100%;"></iframe>
     </div>
-	</div>
-	</div>
-	
+</div>
+
+
+
+        </div>
    
 	 </div>
 	
 	
-
-</div>
-
+<br><br>
+	
 
 
 
@@ -285,51 +305,82 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-<div id="userForms">
-
-<h1> Welcome To Rob's Form Filler </h1>
-
-<br>
-
-<div>
-        <h2>Log In</h2>
-        <input type="text" id="loginUsername" placeholder="Username">
-        <input type="password" id="loginPassword" placeholder="Password">
-        <button onclick="logIn()">Log In</button>
-    </div>
-	
-	<br><br>
-    <div>
-        <h2>Sign Up</h2>
-        <input type="text" id="signupUsername" placeholder="Username">
-        <input type="password" id="signupPassword" placeholder="Password">
-        <button onclick="signUp()">Sign Up</button>
-    </div>
-	<br><br><br><br>
-   
-	
-</div>
-
 <br><br><br>
 
 
 
 
 
+
 <script>
+
+function back() {
+
+	window.location.href = 'profile.html';
+}
+
+
+function revealForm() {
+
+	document.getElementById('pdf-container').style.display = 'block';
+}
+
+function displayUserProfile(state, city) {
+
+	//alert(state);
+    document.getElementById('userState').textContent = state;
+    document.getElementById('userCity').textContent = city;
+    //document.getElementById('userProfile').style.display = 'block';
+}
+
+
+
+    function fetchUserInfo() {
 	
-var warning = "hello";
+	
+        // Simulating fetching user data from the server
+        fetch('/get_data')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch');
+        }
+        return response.json();
+    }).then(data => {
+        console.log('Data received from server:', data);
+        if (data.state && data.city) {
+            displayUserProfile(data.state, data.city);
+        }
+    }).catch(error => console.error('Failed to fetch or parse data:', error));
+    }
+
+
+
 	
 	
+    function clearCookiesAndReturn() {
+        document.cookie = "completedQuestions=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = 'index.html';
+    }
+
+    window.onload = function() {
+        fetchUserInfo();
+ // Fetch and display user information on load
+    };
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
 function propagateInput(className) {
     var inputs = document.getElementsByClassName(className);
     for (var i = 0; i < inputs.length; i++) {
@@ -344,49 +395,6 @@ document.querySelectorAll('.PetitionerCity').forEach(input => {
 document.querySelectorAll('.PetitionerState').forEach(input => {
     input.addEventListener('input', () => propagateInput('PetitionerState'));
 });
-
-// Function to set a cookie
-function setCookie(name, value, days) {
-    var expires = "";
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-}
-
-// Function to get a cookie
-function getCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-
-// Function to check cookie on load and redirect if necessary
-window.onload = function() {
-    //if (getCookie("completedQuestions") === "true") {
-        //window.location.href = 'profile.html'; // Redirect if cookie is set
-    //} else {
-        // Load default PDFs if not redirected
-        loadDefaultPDF();
-        loadSecondaryPDF();
-    //}
-};
-
-
-// Adjust the done function to set a cookie and redirect
-function done() {
-   // document.getElementById('forms').style.display = 'block';
-    setCookie("completedQuestions", "true", 7); // Set cookie for 7 days
-    window.location.href = 'profile.html'; // Redirect to profile.html
-}
-
 
 
 function displayUserProfile(state, city) {
@@ -453,7 +461,7 @@ function fetchData() {
 
 	
 // Hide questions div initially
-document.getElementById('questions').style.display = 'none';
+//document.getElementById('questions').style.display = 'none';
 
 function signUp() {
     var username = document.getElementById('signupUsername').value;
@@ -466,19 +474,13 @@ function signUp() {
         body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
     }).then(response => {
         if (response.ok) {
-            //alert('Signup successful!');
+            alert('Signup successful!');
             window.location.href = '/'; // Redirect to home page
         } else {
-		
-		
-        //response.text().then(text => alert(text));
+            response.text().then(text => alert(text));
         }
     });
 }
-
-
-
-
 
 function logIn() {
     var username = document.getElementById('loginUsername').value;
@@ -491,23 +493,18 @@ function logIn() {
         body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
     }).then(response => {
         if (response.ok) {
-            // Fetch user profile data right after login
-            fetchData();
-            if(getCookie("completedQuestions1") === "true") {
-                window.location.href = 'profile.html'; // Redirect if form is already completed
-            } else {
-                document.getElementById('questions').style.display = 'block';
-                document.getElementById('userForms').style.display = 'none';
-            }
-            //response.text().then(text => alert(text));
+            fetchData();  // Fetch user profile data right after login
+            document.getElementById('questions').style.display = 'block';
+			//document.getElementById('userProfile').style.display = 'block';
+            document.getElementById('userForms').style.display = 'none';
+            alert('Welcome back');
         } else {
-            //response.text().then(text => alert(text));
+            response.text().then(text => alert(text));
         }
     }).catch(error => {
         console.error('Login failed:', error);
     });
 }
-
 
 	
 	
@@ -544,7 +541,7 @@ function goToPrevious(currentDivId, prevDivId) {
             var firmName = document.getElementById('FirmName').value;
             var stateBarNumber = document.getElementById('StateBarNumber').value;
             if (!lawyerName || !firmName || !stateBarNumber) {
-                //alert('Please fill all lawyer information fields.');
+                alert('Please fill all lawyer information fields.');
                 return;
             }
             lawyerInfo = `My lawyer's name is ${lawyerName}, their law firm is ${firmName}, and their state bar number is ${stateBarNumber}.`;
@@ -593,7 +590,7 @@ function goToPrevious(currentDivId, prevDivId) {
             uploadedPdfFile = file; // Save the uploaded file globally
             displayPDF(file);
         } else {
-            //alert('Please select a PDF file to upload.');
+            alert('Please select a PDF file to upload.');
         }
     }
 
@@ -611,7 +608,7 @@ function goToPrevious(currentDivId, prevDivId) {
             })
             .catch(error => {
                 console.error('Error loading default PDF:', error);
-                //alert('Error loading default PDF: ' + error.message);
+                alert('Error loading default PDF: ' + error.message);
             });
 			
 		
@@ -646,7 +643,7 @@ data.fields.forEach(field => {
         })
         .catch(error => {
             console.error('Error processing PDF:', error);
-            //alert('Error processing PDF: ' + error.message);
+            alert('Error processing PDF: ' + error.message);
         });
     }
 	
@@ -676,7 +673,7 @@ data.fields.forEach(field => {
 
     function editPDF() {
         if (!uploadedPdfFile) {
-            //alert('No PDF file is loaded for editing.');
+            alert('No PDF file is loaded for editing.');
             return;
         }
         var formData = new FormData();
@@ -707,15 +704,19 @@ data.fields.forEach(field => {
             document.getElementById('pdfPreview').style.display = 'block';
 			
 			document.getElementById('pdfFrame2').src = url;
-            document.getElementById('pdfPreview2').style.display = 'block';
+            //document.getElementById('pdfPreview2').style.display = 'block';
         })
         .catch(error => {
             console.error('Error updating PDF:', error);
-            //alert('Error updating PDF: ' + error.message);
+            alert('Error updating PDF: ' + error.message);
         });
     }
 
-    
+    // Automatically load the default PDF when the page loads
+    window.onload = function() {
+        loadDefaultPDF();
+    };
+	
 	
 	
 	
@@ -726,11 +727,11 @@ data.fields.forEach(field => {
         .then(blob => {
             var url = window.URL.createObjectURL(blob);
             document.getElementById('pdfFrame2').src = url;
-            document.getElementById('pdfPreview2').style.display = 'block';
+            //document.getElementById('pdfPreview2').style.display = 'block';
         })
         .catch(error => {
             console.error('Error loading second PDF:', error);
-            //alert('Error loading second PDF: ' + error.message);
+            alert('Error loading second PDF: ' + error.message);
         });
 }
 
@@ -739,7 +740,17 @@ data.fields.forEach(field => {
 
 
 
-		
-    </script>
+
+
+
+
+window.onload = function() {
+    loadDefaultPDF();
+    loadSecondaryPDF();
+	fetchUserInfo();
+	// This will also load the second PDF on page load.
+};
+</script>
+
 </body>
 </html>

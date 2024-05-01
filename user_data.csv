@@ -1,5 +1,3 @@
-username,password,state,city,logged_status
-1,2,4,3,
-adam,1234,CA,Salinas,yes
-4,6,,,
-q,e,,,
+username,password,state,city
+adam,1234,5,3
+adam123,1,,

@@ -173,16 +173,13 @@
             <input type="text" id="PetitionerTel[0]" placeholder="Phone Number"><br>
             <br>
             
-		
+		    <!--
 			<button class="next-button" onclick="profile(); ">Continue</button>
+-->
+			
+			<button class="next-button" onclick="saveData(); profile();">Continue</button>
 
 			
-			
-			
-			<!--
-			<button class="next-button" onclick="profile(); done();  goToNext('questions1', 'userProfile')">Continue</button>
-
-			-->
         </div>
 	
 	
@@ -364,7 +361,7 @@
 
 
 function profile() {
-
+	saveData();
     window.location.href = 'profile.html';
 }
 
@@ -604,7 +601,7 @@ function goToPrevious(currentDivId, prevDivId) {
     }
 
     function goToNext(currentDivId, nextDivId) {
-	
+	saveData();
     editPDF();  // Assuming this sends updates to the server.
     var currentDiv = document.getElementById(currentDivId);
     var nextDiv = document.getElementById(nextDivId);

@@ -1,3 +1,5 @@
 username,password,state,city
 1,2,4,3
 adam,1234,CA,Salinas
+4,6,,
+q,e,,

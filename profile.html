@@ -23,21 +23,76 @@
         margin: 4px 2px;
         cursor: pointer;
     }
+
+    #userProfile {
+        border: 4px solid lightblue;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 10px auto;
+        background-color: #e0f7fa;
+        width: 50%;
+       
+    }
 </style>
 </head>
 <body>
 
 <h1>User Profile</h1>
 <p>Welcome to your profile. Here you can manage your settings.</p>
+<p> hello
 
-<!-- Button to clear cookies and go back to the form -->
-<button onclick="clearCookiesAndReturn()">Reset and Return to Questions</button>
+		<div id="userProfile">
+    <h2>User Profile</h2>
+    <p><strong>State:</strong> <span id="userState"></span></p>
+    <p><strong>City:</strong> <span id="userCity"></span></p>
+	<br>
+	</div>
+<button onclick="clearCookiesAndReturn()">Sign Out</button>
 
 <script>
-    function clearCookiesAndReturn() {
-        document.cookie = "completedQuestions=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // Clear the specific cookie
-        window.location.href = 'index.html'; // Redirect back to the main page
+
+
+
+function displayUserProfile(state, city) {
+
+	alert(state);
+    document.getElementById('userState').textContent = state;
+    document.getElementById('userCity').textContent = city;
+    //document.getElementById('userProfile').style.display = 'block';
+}
+
+
+
+    function fetchUserInfo() {
+	
+	
+        // Simulating fetching user data from the server
+        fetch('/get_data')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch');
+        }
+        return response.json();
+    }).then(data => {
+        console.log('Data received from server:', data);
+        if (data.state && data.city) {
+            displayUserProfile(data.state, data.city);
+        }
+    }).catch(error => console.error('Failed to fetch or parse data:', error));
     }
+
+
+
+	
+	
+    function clearCookiesAndReturn() {
+        document.cookie = "completedQuestions=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = 'index.html';
+    }
+
+    window.onload = function() {
+        fetchUserInfo(); // Fetch and display user information on load
+    };
 </script>
 
 </body>

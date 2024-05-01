@@ -143,15 +143,15 @@
 
 	</div>
 	
-	 
+	 <br>
 	
     <div id="questions">
 	
-	<br><br>
+	
         <div id="questions1">
             <h1>Welcome to Rob's Form Filler</h1>
 			
-			<br>
+			
 			<h2>
             <p><strong>What's your full name?</strong></p>
             <input type="text" id="PetitionerName1[0]" placeholder="Full Name"><br>
@@ -173,10 +173,16 @@
             <input type="text" id="PetitionerTel[0]" placeholder="Phone Number"><br>
             <br>
             
-			
-			<button class="next-button" onclick="saveData(); goToNext('questions1', 'questions2')">Next</button>
+		
+			<button class="next-button" onclick="profile(); ">Continue</button>
 
 			
+			
+			
+			<!--
+			<button class="next-button" onclick="profile(); done();  goToNext('questions1', 'userProfile')">Continue</button>
+
+			-->
         </div>
 	
 	
@@ -228,7 +234,7 @@
 
         <div id="questions4" style="display:none">
             <h1>You're all ready to go!</h1>
-			<button class="next-button" onclick="done(); goToNext('questions4', 'userProfile')">Continue</button>
+			<button class="next-button" onclick="done(); goToNext('questions4', 'userProfile')">Fuck</button>
         </div>
 		
 		
@@ -243,7 +249,7 @@
 	</div>
 	
 	
-	<br><br>
+	<br>
 	
 	
 	<div id="forms" style="display:none">
@@ -255,8 +261,14 @@
         <h3>Waive Court Fees</h3>
 		
 		<br>
-		<button class="next-button"  onclick="downloadPDF('pdfFrame')">Download PDF</button>
+		
 		<br>
+		<button class="next-button"  onclick="fillwaive()">Access Form</button>
+		<br>
+		
+		<!--
+		<button class="next-button"  onclick="downloadPDF('pdfFrame')">Download Form</button>
+		-->
 		
 		<!--<button class="next-button"  onclick="waive()">Preview PDF</button>
 		-->
@@ -273,7 +285,13 @@
         <h3>Small Claims Court</h3>
 		
 		<br>
-		<button class="next-button"  onclick="downloadPDF('pdfFrame2')">Download PDF</button>
+		
+		<br>
+		<button class="next-button"  onclick="fillwaive()">Access Form</button>
+		<br>
+		
+		<!--
+		<button class="next-button"  onclick="downloadPDF('pdfFrame2')">Download From</button>
 		<br>
 		
 		<!--<button class="next-button"  onclick="small()">Preview PDF</button>
@@ -343,6 +361,18 @@
 
 <script>
 
+
+
+function profile() {
+
+    window.location.href = 'profile.html';
+}
+
+
+function fillwaive() {
+
+    window.location.href = 'waive.html';
+}
 function waive() {
 
     document.getElementById('waive').style.display = 'block';

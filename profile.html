@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Profile</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        padding: 20px;
+        text-align: center;
+    }
+
+    button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    
+</style>
+
+
+
+<style>
+
+
+
+
+
+
+    .container {
+        display: flex;
+        justify-content: space-around;
+        align-items: start;
+        margin-top: 20px;
+    }
+
+    #questions {
+    border: 4px solid lightblue; /* Set the border color */
+    border-radius: 10px;        /* Rounded corners */
+    padding: 20px;              /* Some padding inside the border */
+    margin: 10px;               /* Margin outside the border */
+    background-color: #ffffff;  /* Light blue background */
+    width: 600px;               /* Fixed width */
+    height: 100%              /* Fixed height */
+    overflow-y: auto;           /* Enable vertical scrolling for overflow */
+    overflow-x: hidden;         /* Hide horizontal overflow */
+}
+
+
+
+#userForms {
+    border: 4px solid lightblue; /* Set the border color */
+    border-radius: 10px;        /* Rounded corners */
+    padding: 20px;              /* Some padding inside the border */
+    margin: 10px;               /* Margin outside the border */
+    background-color: #ffffff;  /* Light blue background */
+    width: 90%;               /* Fixed width */
+    height: 100%              /* Fixed height */
+    
+}
+
+
+#userProfile {
+    border: 4px solid lightblue; /* Set the border color */
+    border-radius: 10px;        /* Rounded corners */
+    padding: 0px;              /* Some padding inside the border */
+    margin: 20px;               /* Margin outside the border */
+    background-color: #ffffff;  /* Light blue background */
+    width: 90%;              /* Fixed width */
+    height: 100%              /* Fixed height */
+    
+}
+
+#userProfile2 {
+    border: 4px solid lightblue; /* Set the border color */
+    border-radius: 10px;        /* Rounded corners */
+    padding: 0px;              /* Some padding inside the border */
+    margin: 20px;               /* Margin outside the border */
+    background-color: #ffffff;  /* Light blue background */
+    width: 60%;              /* Fixed width */
+    height: 100%              /* Fixed height */
+    
+}
+
+#forms {
+    border: 4px solid lightblue; /* Set the border color */
+    border-radius: 10px;        /* Rounded corners */
+    padding: 0px;              /* Some padding inside the border */
+    margin: 0px;               /* Margin outside the border */
+    background-color: #ffffff;  /* Light blue background */
+    width: 90%;               /* Fixed width */
+    height: 100%              /* Fixed height */
+    
+}
+
+
+	
+	
+	.pdf-container {
+    display: flex;
+    justify-content: space-around; /* Distributes space between and around content items */
+    align-items: start; /* Aligns items to be flex-start aligned */
+    margin-top: 20px;
+}
+
+#pdfPreview, #pdfPreview2 {
+    flex: 1;  /* Each takes up equal space */
+    border: 4px solid lightblue;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    background-color: #ffffff;
+    width: 45%;  /* Adjust width to make sure they do not squash together */
+    height: 100%;  /* Optional: Adjust height as necessary */
+    overflow-y: auto;
+    box-sizing: border-box; /* Includes padding and borders in the element's total width and height */
+}
+
+#pdfFrame, #pdfFrame2 {
+    width: 100%;  /* Ensure it takes the full width of its parent */
+    height: 100%;  /* Ensure it takes the full height of its parent */
+    border: none;  /* Remove any default border */
+}
+
+	
+    .next-button {
+        background-color: #64adc4;  /* Match theme color */
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+	
+	.back-button {
+        background-color: #64adc4;  /* Match theme color */
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+</style>
+
+
+</head>
+<body>
+
+<center>
+
+<h1>Rob's Form Filler</h2>
+
+		<div id="userProfile">
+    <h2>User Profile</h2>
+	
+	<div id="userProfile2">
+	<br>
+    <p><h3><strong>State:</strong> <span id="userState"></span></p>
+    <p><strong>City:</strong> <span id="userCity"></span></p>
+	<br>
+	</div>
+	</div>
+	<!--
+<button onclick="clearCookiesAndReturn()">Sign Out</button>
+-->
+
+
+	
+	
+	<br>
+	
+	
+	<div id="forms" >
+	
+	<h1> My Forms </h1>
+	
+	<div class="pdf-container">
+    <div id="pdfPreview">
+        <h3>Waive Court Fees</h3>
+		
+		<br>
+		
+		<br>
+		<button class="next-button"  onclick="fillwaive()">Access Form</button>
+		<br>
+		
+		<!--
+		<button class="next-button"  onclick="downloadPDF('pdfFrame')">Download Form</button>
+		
+		<!--<button class="next-button"  onclick="waive()">Preview PDF</button>
+		-->
+		<!--
+		<br><br>
+		<div id="waive" id="pdfFrame" >
+        <iframe id="pdfFrame" ></iframe>
+        </div>
+		-->
+		
+		<br><br>
+    </div>
+
+    <div id="pdfPreview2">
+        <h3>Small Claims Court</h3>
+		
+		<br>
+		
+		<br>
+		<button class="next-button"  onclick="fillwaive()">Access Form</button>
+		<br>
+		
+		<!--
+		<button class="next-button"  onclick="downloadPDF('pdfFrame2')">Download From</button>
+		<br>
+		
+		<!--<button class="next-button"  onclick="small()">Preview PDF</button>
+		-->
+		<!--
+		<br><br>
+		<div id="small" id="pdfFrame2" >
+        <iframe id="pdfFrame2" ></iframe>
+        </div>
+		-->
+		
+		<br><br>
+		
+    </div>
+</div>
+
+	</div>
+	
+	
+<script>
+
+function fillwaive() {
+
+    window.location.href = 'waive.html';
+}
+
+
+ function uploadPDF() {
+        var fileInput = document.getElementById('pdfFile');
+        var file = fileInput.files[0];
+        if (file) {
+            uploadedPdfFile = file; // Save the uploaded file globally
+            displayPDF(file);
+        } else {
+            //alert('Please select a PDF file to upload.');
+        }
+    }
+
+    function loadDefaultPDF() {
+	
+	
+		const defaultUrl = 'http://127.0.0.1:5000/form.pdf';
+            fetch(defaultUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                uploadedPdfFile = blob; // Save the default PDF blob globally
+				editPDF(blob);
+                displayPDF(blob);
+				
+            })
+            .catch(error => {
+                console.error('Error loading default PDF:', error);
+                //alert('Error loading default PDF: ' + error.message);
+            });
+			
+		
+    }
+
+    function displayPDF(pdfBlob) {
+        var formData = new FormData();
+        formData.append('pdf', pdfBlob);
+        fetch('/upload', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('editPDF').style.display = 'block'; // Show the edit button
+            var fieldList = document.getElementById('fieldList');
+            fieldList.innerHTML = '';
+			
+			
+            // Correct this part of the displayPDF function in index.html
+data.fields.forEach(field => {
+    var li = document.createElement('li');
+    var input = document.createElement('input');  // Always an input
+    input.type = field.is_checkbox ? 'checkbox' : 'text';  // Set type based on property
+    input.id = field.name;
+    input.placeholder = 'Enter value for ' + field.name;
+    li.textContent = field.name + ': ';
+    li.appendChild(input);
+    fieldList.appendChild(li);
+});
+
+        })
+        .catch(error => {
+            console.error('Error processing PDF:', error);
+            //alert('Error processing PDF: ' + error.message);
+        });
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+    function editPDF() {
+        if (!uploadedPdfFile) {
+            //alert('No PDF file is loaded for editing.');
+            return;
+        }
+        var formData = new FormData();
+        formData.append('pdf', uploadedPdfFile);
+        var inputs = document.querySelectorAll('#questions input, #fieldList input');
+        inputs.forEach(input => {
+		
+		if (input.type === 'checkbox') {
+        formData.append(input.id, input.checked ? 'Yes' : 'No');
+		}
+            if (input.value) {
+                formData.append(input.id, input.value);
+            }
+        });
+        fetch('/edit_pdf', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            var url = window.URL.createObjectURL(blob);
+            document.getElementById('pdfFrame').src = url;
+            //document.getElementById('pdfPreview').style.display = 'block';
+			
+			document.getElementById('pdfFrame2').src = url;
+            //document.getElementById('pdfPreview2').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error updating PDF:', error);
+            //alert('Error updating PDF: ' + error.message);
+        });
+    }
+
+    // Automatically load the default PDF when the page loads
+    window.onload = function() {
+        loadDefaultPDF();
+    };
+	
+	
+	
+	
+	function loadSecondaryPDF() {
+    const secondaryUrl = 'http://127.0.0.1:5000/form2.pdf';
+    fetch(secondaryUrl)
+        .then(response => response.blob())
+        .then(blob => {
+            var url = window.URL.createObjectURL(blob);
+            document.getElementById('pdfFrame2').src = url;
+            //document.getElementById('pdfPreview2').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error loading second PDF:', error);
+            //alert('Error loading second PDF: ' + error.message);
+        });
+}
+
+
+
+
+
+
+
+
+
+
+window.onload = function() {
+    loadDefaultPDF();
+    loadSecondaryPDF(); // This will also load the second PDF on page load.
+};
+
+
+
+
+function displayUserProfile(state, city) {
+    document.getElementById('userState').textContent = state;
+    document.getElementById('userCity').textContent = city;
+    //document.getElementById('userProfile').style.display = 'block';
+}
+
+
+
+    function fetchUserInfo() {
+	
+	
+        // Simulating fetching user data from the server
+        fetch('/get_data')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch');
+        }
+        return response.json();
+    }).then(data => {
+        console.log('Data received from server:', data);
+        if (data.state && data.city) {
+            displayUserProfile(data.state, data.city);
+        }
+    }).catch(error => console.error('Failed to fetch or parse data:', error));
+    }
+
+
+
+	// Function to get a cookie
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+	
+    function clearCookiesAndReturn() {
+    fetch('/logout', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.success);
+        document.cookie = "completedQuestions=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = 'index.html';
+    })
+    .catch(error => console.error('Logout failed:', error));
+}
+
+
+    window.onload = function() {
+	
+	
+    loadDefaultPDF();
+    loadSecondaryPDF(); // This will also load the second PDF on page load.
+
+
+	
+		if (getCookie("completedQuestions") === "true") {
+		//alert('Welcome');
+        
+    } else {
+      window.location.href = 'index.html'; // Redirect if cookie is set  
+	}
+	
+	
+        fetchUserInfo(); // Fetch and display user information on load
+    };
+</script>
+
+</body>
+</html>

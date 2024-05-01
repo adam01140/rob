@@ -90,11 +90,34 @@ def get_data():
    
 
 
+def update_user_status(username, status):
+    users = {}
+    try:
+        with open('user_data.csv', 'r', newline='') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                users[row['username']] = row
+            if username in users:
+                users[username]['logged_status'] = status
+    except FileNotFoundError:
+        print("No existing CSV file found.")
 
-@app.route('/logout')
+    with open('user_data.csv', 'w', newline='') as csvfile:
+        fieldnames = ['username', 'password', 'state', 'city', 'logged_status']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for user in users.values():
+            writer.writerow(user)
+
+
+@app.route('/logout', methods=['POST'])
 def logout():
-    session.pop('user', None)
-    return redirect(url_for('index'))
+    username = session.get('user')
+    if username:
+        update_user_status(username, 'yes')  # Function to update the CSV file
+        session.pop('user', None)  # Log the user out by removing their session
+        return jsonify({'success': 'Logged out successfully'}), 200
+    return jsonify({'error': 'User not logged in'}), 401
 
 
 

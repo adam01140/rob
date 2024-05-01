@@ -54,8 +54,6 @@
 
 
 function displayUserProfile(state, city) {
-
-	alert(state);
     document.getElementById('userState').textContent = state;
     document.getElementById('userCity').textContent = city;
     //document.getElementById('userProfile').style.display = 'block';
@@ -83,14 +81,40 @@ function displayUserProfile(state, city) {
 
 
 
-	
+	// Function to get a cookie
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
 	
     function clearCookiesAndReturn() {
+    fetch('/logout', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.success);
         document.cookie = "completedQuestions=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         window.location.href = 'index.html';
-    }
+    })
+    .catch(error => console.error('Logout failed:', error));
+}
+
 
     window.onload = function() {
+	
+		if (getCookie("completedQuestions") === "true") {
+		alert('Welcome');
+        
+    } else {
+      window.location.href = 'index.html'; // Redirect if cookie is set  
+	}
+	
+	
         fetchUserInfo(); // Fetch and display user information on load
     };
 </script>

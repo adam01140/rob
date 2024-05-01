@@ -9,6 +9,12 @@
 
 
 
+body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        padding: 20px;
+        text-align: center;
+    }
 
 
 
@@ -24,7 +30,7 @@
     border-radius: 10px;        /* Rounded corners */
     padding: 20px;              /* Some padding inside the border */
     margin: 10px;               /* Margin outside the border */
-    background-color: #e0f7fa;  /* Light blue background */
+    background-color: #ffffff;  /* Light blue background */
     width: 600px;               /* Fixed width */
     height: 100%              /* Fixed height */
     overflow-y: auto;           /* Enable vertical scrolling for overflow */
@@ -38,7 +44,7 @@
     border-radius: 10px;        /* Rounded corners */
     padding: 20px;              /* Some padding inside the border */
     margin: 10px;               /* Margin outside the border */
-    background-color: #e0f7fa;  /* Light blue background */
+    background-color: #ffffff;  /* Light blue background */
     width: 600px;               /* Fixed width */
     height: 100%              /* Fixed height */
     
@@ -290,19 +296,28 @@
 
 
 <div id="userForms">
+
+<h1> Welcome To Rob's Form Filler </h1>
+
+<br>
+
+<div>
+        <h2>Log In</h2>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="logIn()">Log In</button>
+    </div>
+	
+	<br><br>
     <div>
         <h2>Sign Up</h2>
         <input type="text" id="signupUsername" placeholder="Username">
         <input type="password" id="signupPassword" placeholder="Password">
         <button onclick="signUp()">Sign Up</button>
     </div>
-    <div>
-        <h2>Log In</h2>
-        <input type="text" id="loginUsername" placeholder="Username">
-        <input type="password" id="loginPassword" placeholder="Password">
-        <button onclick="logIn()">Log In</button>
-    </div>
-	<br><br>
+	<br><br><br><br>
+   
+	
 </div>
 
 <br><br><br>
@@ -478,7 +493,7 @@ function logIn() {
                 document.getElementById('questions').style.display = 'block';
                 document.getElementById('userForms').style.display = 'none';
             }
-            alert('Welcome back');
+            //response.text().then(text => alert(text));
         } else {
             response.text().then(text => alert(text));
         }

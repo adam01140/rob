@@ -162,6 +162,7 @@
 <h1>Rob's Form Filler</h2>
 
 		<div id="userProfile">
+		<br>
     <h2>User Profile</h2>
 	
 	<div id="userProfile2">
@@ -170,6 +171,7 @@
     <p><strong>City:</strong> <span id="userCity"></span></p>
 	<br>
 	</div>
+	<br>
 	</div>
 	<!--
 <button onclick="clearCookiesAndReturn()">Sign Out</button>
@@ -182,12 +184,12 @@
 	
 	
 	<div id="forms" >
-	
+	<br>
 	<h1> My Forms </h1>
 	
 	<div class="pdf-container">
     <div id="pdfPreview">
-        <h3>Waive Court Fees</h3>
+        <h2>Waive Court Fees</h3>
 		
 		<br>
 		
@@ -208,10 +210,11 @@
 		-->
 		
 		<br><br>
+		
     </div>
 
     <div id="pdfPreview2">
-        <h3>Small Claims Court</h3>
+        <h2>Small Claims Court</h3>
 		
 		<br>
 		
@@ -235,8 +238,9 @@
 		<br><br>
 		
     </div>
+	<br>
 </div>
-
+<br>
 	</div>
 	
 	
@@ -463,7 +467,7 @@ function getCookie(name) {
     .then(data => {
         console.log(data.success);
         document.cookie = "completedQuestions=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        window.location.href = 'index.html';
+        //window.location.href = 'index.html';
     })
     .catch(error => console.error('Logout failed:', error));
 }
@@ -481,7 +485,7 @@ function getCookie(name) {
 		//alert('Welcome');
         
     } else {
-      window.location.href = 'index.html'; // Redirect if cookie is set  
+      //window.location.href = 'index.html'; // Redirect if cookie is set  
 	}
 	
 	

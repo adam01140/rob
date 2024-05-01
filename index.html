@@ -44,6 +44,16 @@
     
 }
 
+#userForm {
+    border: 4px solid lightblue; /* Set the border color */
+    border-radius: 10px;        /* Rounded corners */
+    padding: 20px;              /* Some padding inside the border */
+    margin: 10px;               /* Margin outside the border */
+    background-color: #ffffff;  /* Light blue background */
+    width: 80%;               /* Fixed width */
+    height: 100%              /* Fixed height */
+    
+}
 
 #userProfile {
     border: 4px solid lightblue; /* Set the border color */
@@ -333,6 +343,10 @@
 
 <br><br>
 
+<div id="userForm">
+<br><br>
+
+<h1> Rob's Form Filler </h1>
 <div id="userForms">
     <div>
         <h2>Sign Up</h2>
@@ -340,13 +354,17 @@
         <input type="password" id="signupPassword" placeholder="Password">
         <button onclick="signUp()">Sign Up</button>
     </div>
+</div>
 	<br><br>
+	
+<div id="userForms">
     <div>
         <h2>Log In</h2>
         <input type="text" id="loginUsername" placeholder="Username">
         <input type="password" id="loginPassword" placeholder="Password">
         <button onclick="logIn()">Log In</button>
     </div>
+</div>
 	<br><br>
 </div>
 

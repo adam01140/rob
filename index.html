@@ -330,10 +330,48 @@ document.querySelectorAll('.PetitionerState').forEach(input => {
     input.addEventListener('input', () => propagateInput('PetitionerState'));
 });
 
-function done() {
-
-    document.getElementById('forms').style.display = 'block';
+// Function to set a cookie
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
+
+// Function to get a cookie
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+// Function to check cookie on load and redirect if necessary
+window.onload = function() {
+    //if (getCookie("completedQuestions") === "true") {
+        //window.location.href = 'profile.html'; // Redirect if cookie is set
+    //} else {
+        // Load default PDFs if not redirected
+        loadDefaultPDF();
+        loadSecondaryPDF();
+    //}
+};
+
+
+// Adjust the done function to set a cookie and redirect
+function done() {
+    document.getElementById('forms').style.display = 'block';
+    setCookie("completedQuestions", "true", 7); // Set cookie for 7 days
+    window.location.href = 'profile.html'; // Redirect to profile.html
+}
+
 
 
 function displayUserProfile(state, city) {
@@ -432,10 +470,14 @@ function logIn() {
         body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
     }).then(response => {
         if (response.ok) {
-            fetchData();  // Fetch user profile data right after login
-            document.getElementById('questions').style.display = 'block';
-			//document.getElementById('userProfile').style.display = 'block';
-            document.getElementById('userForms').style.display = 'none';
+            // Fetch user profile data right after login
+            fetchData();
+            if(getCookie("completedQuestions") === "true") {
+                window.location.href = 'profile.html'; // Redirect if form is already completed
+            } else {
+                document.getElementById('questions').style.display = 'block';
+                document.getElementById('userForms').style.display = 'none';
+            }
             alert('Welcome back');
         } else {
             response.text().then(text => alert(text));
@@ -444,6 +486,7 @@ function logIn() {
         console.error('Login failed:', error);
     });
 }
+
 
 	
 	
@@ -651,11 +694,7 @@ data.fields.forEach(field => {
         });
     }
 
-    // Automatically load the default PDF when the page loads
-    window.onload = function() {
-        loadDefaultPDF();
-    };
-	
+    
 	
 	
 	
@@ -677,16 +716,6 @@ data.fields.forEach(field => {
 
 
 
-
-
-
-
-
-
-window.onload = function() {
-    loadDefaultPDF();
-    loadSecondaryPDF(); // This will also load the second PDF on page load.
-};
 
 
 		

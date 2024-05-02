@@ -470,7 +470,7 @@ function saveData() {
         body: `state=${encodeURIComponent(state)}&city=${encodeURIComponent(city)}`
     }).then(response => {
         if (!response.ok) {
-            throw new Error('Failed to save data');
+            //throw new Error('Failed to save data');
         }
         return response.json();
     }).then(data => {
@@ -489,7 +489,7 @@ function fetchData() {
     fetch('/get_data')
     .then(response => {
         if (!response.ok) {
-            throw new Error('Failed to fetch');
+            //throw new Error('Failed to fetch');
         }
         return response.json();
     }).then(data => {
@@ -553,7 +553,7 @@ function logIn() {
             response.text().then(text => alert(text));
         }
     }).catch(error => {
-        console.error('Login failed:', error);
+        //console.error('Login failed:', error);
     });
 }
 
@@ -659,7 +659,7 @@ function goToPrevious(currentDivId, prevDivId) {
             })
             .catch(error => {
                 console.error('Error loading default PDF:', error);
-                alert('Error loading default PDF: ' + error.message);
+              
             });
 			
 		
@@ -694,7 +694,7 @@ data.fields.forEach(field => {
         })
         .catch(error => {
             console.error('Error processing PDF:', error);
-            alert('Error processing PDF: ' + error.message);
+           
         });
     }
 	
@@ -724,7 +724,7 @@ data.fields.forEach(field => {
 
     function editPDF() {
         if (!uploadedPdfFile) {
-            alert('No PDF file is loaded for editing.');
+            //alert('No PDF file is loaded for editing.');
             return;
         }
         var formData = new FormData();
@@ -759,7 +759,7 @@ data.fields.forEach(field => {
         })
         .catch(error => {
             console.error('Error updating PDF:', error);
-            alert('Error updating PDF: ' + error.message);
+            
         });
     }
 
@@ -782,7 +782,7 @@ data.fields.forEach(field => {
         })
         .catch(error => {
             console.error('Error loading second PDF:', error);
-            alert('Error loading second PDF: ' + error.message);
+           
         });
 }
 

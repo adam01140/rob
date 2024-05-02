@@ -342,6 +342,7 @@
 
 
 <br><br>
+<div id="usersignin" >
 
 <div id="userForm">
 <br><br>
@@ -353,7 +354,8 @@
         <h2>Sign Up</h2>
         <input type="text" id="signupUsername" placeholder="Username">
         <input type="password" id="signupPassword" placeholder="Password">
-        <button onclick="signUp()">Sign Up</button>
+        <button onclick="signUp(); hidesignin()">Sign Up</button>
+
     </div>
 </div>
 	<br><br>
@@ -368,7 +370,7 @@
 </div>
 	<br><br>
 </div>
-
+</div>
 <br><br><br>
 
 
@@ -377,6 +379,11 @@
 
 <script>
 
+
+function hidesignin() {
+
+    document.getElementById('usersignin').style.display = 'none';
+}
 
 
 function profile() {
